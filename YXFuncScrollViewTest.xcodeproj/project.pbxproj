@@ -20,6 +20,9 @@
 		843753182452C6E100EC71AF /* YXFuncScrollBaseTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 843753172452C6E100EC71AF /* YXFuncScrollBaseTabView.m */; };
 		8437531B2452D1F900EC71AF /* ShowDemoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8437531A2452D1F900EC71AF /* ShowDemoView.m */; };
 		8437531E2452D58600EC71AF /* ShowHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8437531D2452D58600EC71AF /* ShowHeaderView.m */; };
+		843753212452EE6B00EC71AF /* YXFuncScrollBaseTabSecHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 843753202452EE6B00EC71AF /* YXFuncScrollBaseTabSecHeaderView.m */; };
+		843753242452EE7E00EC71AF /* YXFuncScrollBaseTabSecFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 843753232452EE7E00EC71AF /* YXFuncScrollBaseTabSecFooterView.m */; };
+		843753272452EEA900EC71AF /* YXFuncScrollBaseTabCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 843753262452EEA900EC71AF /* YXFuncScrollBaseTabCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +69,12 @@
 		8437531A2452D1F900EC71AF /* ShowDemoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowDemoView.m; sourceTree = "<group>"; };
 		8437531C2452D58600EC71AF /* ShowHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowHeaderView.h; sourceTree = "<group>"; };
 		8437531D2452D58600EC71AF /* ShowHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowHeaderView.m; sourceTree = "<group>"; };
+		8437531F2452EE6B00EC71AF /* YXFuncScrollBaseTabSecHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXFuncScrollBaseTabSecHeaderView.h; sourceTree = "<group>"; };
+		843753202452EE6B00EC71AF /* YXFuncScrollBaseTabSecHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXFuncScrollBaseTabSecHeaderView.m; sourceTree = "<group>"; };
+		843753222452EE7E00EC71AF /* YXFuncScrollBaseTabSecFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXFuncScrollBaseTabSecFooterView.h; sourceTree = "<group>"; };
+		843753232452EE7E00EC71AF /* YXFuncScrollBaseTabSecFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXFuncScrollBaseTabSecFooterView.m; sourceTree = "<group>"; };
+		843753252452EEA900EC71AF /* YXFuncScrollBaseTabCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXFuncScrollBaseTabCell.h; sourceTree = "<group>"; };
+		843753262452EEA900EC71AF /* YXFuncScrollBaseTabCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXFuncScrollBaseTabCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,6 +178,12 @@
 			children = (
 				843753162452C6E100EC71AF /* YXFuncScrollBaseTabView.h */,
 				843753172452C6E100EC71AF /* YXFuncScrollBaseTabView.m */,
+				843753252452EEA900EC71AF /* YXFuncScrollBaseTabCell.h */,
+				843753262452EEA900EC71AF /* YXFuncScrollBaseTabCell.m */,
+				8437531F2452EE6B00EC71AF /* YXFuncScrollBaseTabSecHeaderView.h */,
+				843753202452EE6B00EC71AF /* YXFuncScrollBaseTabSecHeaderView.m */,
+				843753222452EE7E00EC71AF /* YXFuncScrollBaseTabSecFooterView.h */,
+				843753232452EE7E00EC71AF /* YXFuncScrollBaseTabSecFooterView.m */,
 			);
 			path = YXFuncScrollBaseTabView;
 			sourceTree = "<group>";
@@ -304,12 +319,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				8437531E2452D58600EC71AF /* ShowHeaderView.m in Sources */,
+				843753272452EEA900EC71AF /* YXFuncScrollBaseTabCell.m in Sources */,
 				843752DE2452B6D000EC71AF /* ViewController.m in Sources */,
 				843753112452BACC00EC71AF /* YXFuncScrollBaseView.m in Sources */,
 				843752D82452B6D000EC71AF /* AppDelegate.m in Sources */,
 				843752E92452B6D200EC71AF /* main.m in Sources */,
+				843753212452EE6B00EC71AF /* YXFuncScrollBaseTabSecHeaderView.m in Sources */,
 				843752DB2452B6D000EC71AF /* SceneDelegate.m in Sources */,
 				843753182452C6E100EC71AF /* YXFuncScrollBaseTabView.m in Sources */,
+				843753242452EE7E00EC71AF /* YXFuncScrollBaseTabSecFooterView.m in Sources */,
 				8437531B2452D1F900EC71AF /* ShowDemoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
