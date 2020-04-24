@@ -16,6 +16,10 @@
 		843752E92452B6D200EC71AF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 843752E82452B6D200EC71AF /* main.m */; };
 		843752F32452B6D200EC71AF /* YXFuncScrollViewTestTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 843752F22452B6D200EC71AF /* YXFuncScrollViewTestTests.m */; };
 		843752FE2452B6D200EC71AF /* YXFuncScrollViewTestUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 843752FD2452B6D200EC71AF /* YXFuncScrollViewTestUITests.m */; };
+		843753112452BACC00EC71AF /* YXFuncScrollBaseView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8437530F2452BACC00EC71AF /* YXFuncScrollBaseView.m */; };
+		843753182452C6E100EC71AF /* YXFuncScrollBaseTabView.m in Sources */ = {isa = PBXBuildFile; fileRef = 843753172452C6E100EC71AF /* YXFuncScrollBaseTabView.m */; };
+		8437531B2452D1F900EC71AF /* ShowDemoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8437531A2452D1F900EC71AF /* ShowDemoView.m */; };
+		8437531E2452D58600EC71AF /* ShowHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8437531D2452D58600EC71AF /* ShowHeaderView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,6 +58,14 @@
 		843752F92452B6D200EC71AF /* YXFuncScrollViewTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = YXFuncScrollViewTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		843752FD2452B6D200EC71AF /* YXFuncScrollViewTestUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXFuncScrollViewTestUITests.m; sourceTree = "<group>"; };
 		843752FF2452B6D200EC71AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8437530F2452BACC00EC71AF /* YXFuncScrollBaseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXFuncScrollBaseView.m; sourceTree = "<group>"; };
+		843753102452BACC00EC71AF /* YXFuncScrollBaseView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXFuncScrollBaseView.h; sourceTree = "<group>"; };
+		843753162452C6E100EC71AF /* YXFuncScrollBaseTabView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXFuncScrollBaseTabView.h; sourceTree = "<group>"; };
+		843753172452C6E100EC71AF /* YXFuncScrollBaseTabView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXFuncScrollBaseTabView.m; sourceTree = "<group>"; };
+		843753192452D1F900EC71AF /* ShowDemoView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowDemoView.h; sourceTree = "<group>"; };
+		8437531A2452D1F900EC71AF /* ShowDemoView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowDemoView.m; sourceTree = "<group>"; };
+		8437531C2452D58600EC71AF /* ShowHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShowHeaderView.h; sourceTree = "<group>"; };
+		8437531D2452D58600EC71AF /* ShowHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShowHeaderView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,12 +116,17 @@
 		843752D52452B6D000EC71AF /* YXFuncScrollViewTest */ = {
 			isa = PBXGroup;
 			children = (
+				8437530E2452BACC00EC71AF /* YXFuncScrollView */,
 				843752D62452B6D000EC71AF /* AppDelegate.h */,
 				843752D72452B6D000EC71AF /* AppDelegate.m */,
 				843752D92452B6D000EC71AF /* SceneDelegate.h */,
 				843752DA2452B6D000EC71AF /* SceneDelegate.m */,
 				843752DC2452B6D000EC71AF /* ViewController.h */,
 				843752DD2452B6D000EC71AF /* ViewController.m */,
+				843753192452D1F900EC71AF /* ShowDemoView.h */,
+				8437531A2452D1F900EC71AF /* ShowDemoView.m */,
+				8437531C2452D58600EC71AF /* ShowHeaderView.h */,
+				8437531D2452D58600EC71AF /* ShowHeaderView.m */,
 				843752DF2452B6D000EC71AF /* Main.storyboard */,
 				843752E22452B6D200EC71AF /* Assets.xcassets */,
 				843752E42452B6D200EC71AF /* LaunchScreen.storyboard */,
@@ -135,6 +152,25 @@
 				843752FF2452B6D200EC71AF /* Info.plist */,
 			);
 			path = YXFuncScrollViewTestUITests;
+			sourceTree = "<group>";
+		};
+		8437530E2452BACC00EC71AF /* YXFuncScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				843753152452C6E100EC71AF /* YXFuncScrollBaseTabView */,
+				843753102452BACC00EC71AF /* YXFuncScrollBaseView.h */,
+				8437530F2452BACC00EC71AF /* YXFuncScrollBaseView.m */,
+			);
+			path = YXFuncScrollView;
+			sourceTree = "<group>";
+		};
+		843753152452C6E100EC71AF /* YXFuncScrollBaseTabView */ = {
+			isa = PBXGroup;
+			children = (
+				843753162452C6E100EC71AF /* YXFuncScrollBaseTabView.h */,
+				843753172452C6E100EC71AF /* YXFuncScrollBaseTabView.m */,
+			);
+			path = YXFuncScrollBaseTabView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,10 +303,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8437531E2452D58600EC71AF /* ShowHeaderView.m in Sources */,
 				843752DE2452B6D000EC71AF /* ViewController.m in Sources */,
+				843753112452BACC00EC71AF /* YXFuncScrollBaseView.m in Sources */,
 				843752D82452B6D000EC71AF /* AppDelegate.m in Sources */,
 				843752E92452B6D200EC71AF /* main.m in Sources */,
 				843752DB2452B6D000EC71AF /* SceneDelegate.m in Sources */,
+				843753182452C6E100EC71AF /* YXFuncScrollBaseTabView.m in Sources */,
+				8437531B2452D1F900EC71AF /* ShowDemoView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,7 +480,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2HSQ24Z864;
 				INFOPLIST_FILE = YXFuncScrollViewTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -456,7 +498,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2HSQ24Z864;
 				INFOPLIST_FILE = YXFuncScrollViewTest/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
