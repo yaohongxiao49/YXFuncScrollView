@@ -148,6 +148,15 @@
 }
 
 #pragma mark - UIScrollViewDelegate
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    
+    if (scrollView == self.scrollView) {
+        NSInteger page = scrollView.contentOffset.x /scrollView.bounds.size.width;
+        if (self.tabView.currentIndex != page) {
+            [self refreshrViewAtIndex:page];
+        }
+    }
+}
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
     if (scrollView == self.scrollView) {
@@ -250,8 +259,24 @@
 - (YXFuncScrollBaseTabView *)tabView {
     
     if (!_tabView) {
-        _tabView = [[YXFuncScrollBaseTabView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY([self.headerView frame]), self.baseScrollView.bounds.size.width, 50)];
+        _tabView = [[YXFuncScrollBaseTabView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY([self.headerView frame]), self.baseScrollView.bounds.size.width, 50) suckType:YXFuncScrollBaseTabVSuckTypeFull textShowType:YXFuncScrollBaseTabVTypeAuto lineType:YXFuncScrollBaseTabVSelTypeTextLine];
+        _tabView.backgroundColor = [UIColor whiteColor];
+        _tabView.secHeaderWidth = 60;
+        _tabView.secFooterWidth = 60;
+        _tabView.cellSpece = 10;
+        _tabView.norTitleFont = [UIFont systemFontOfSize:14];
+        _tabView.norTextColor = [UIColor blackColor];
+        _tabView.selTitleFont = [UIFont systemFontOfSize:14];
+        _tabView.selTextColor = [UIColor redColor];
+        _tabView.selLineColor = [UIColor blueColor];
+//        _tabView.lineWidth = 10;
+        _tabView.boolLineAnimation = YES;
         [self.baseScrollView addSubview:_tabView];
+        __weak typeof(self) weakSelf = self;
+        _tabView.yxFuncScrollBaseTabVBlock = ^(NSInteger current) {
+            
+            [weakSelf refreshrViewAtIndex:current];
+        };
     }
     return _tabView;
 }

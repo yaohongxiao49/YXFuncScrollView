@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol YXFuncScrollBaseViewDelegate <NSObject>
 
+/** 切换栏目 */
 - (void)yxSwitchModuleByNowView:(UIView *)nowView index:(NSInteger)index;
 
 @end
