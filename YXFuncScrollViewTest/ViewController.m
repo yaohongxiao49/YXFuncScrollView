@@ -7,13 +7,13 @@
 //
 
 #import "ViewController.h"
-#import "YXFuncScrollBaseView.h"
-#import "ShowDemoView.h"
-#import "ShowHeaderView.h"
+#import "YXFuncPinScrollViewController.h"
+#import "YXFuncCycleScrollViewVC.h"
+ 
+@interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@interface ViewController () <YXFuncScrollBaseViewDelegate>
-
-@property (nonatomic, strong) YXFuncScrollBaseView *baseView;
+@property (nonatomic, strong) NSMutableArray *dataSourceArr;
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
 
@@ -23,37 +23,43 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    __weak typeof(self) weakSelf = self;
-    CGFloat naviHeight = 88;
-    _baseView = [[YXFuncScrollBaseView alloc] initWithFrame:CGRectMake(0, naviHeight, self.view.bounds.size.width, self.view.bounds.size.height - naviHeight) baseVC:self boolHasNavi:YES boolContainFrash:NO];
-    _baseView.delegate = self;
-    _baseView.showTabArrs = (NSMutableArray *)@[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"10", @"11"];
-    [self.view addSubview:_baseView];
+    _dataSourceArr = [[NSMutableArray alloc] initWithObjects:@"吸顶的滚动视图", @"无限循环的滚动视图", @"other", nil];
     
-    ShowHeaderView *headerView = [[ShowHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
-    _baseView.topView = headerView;
-    
-    ShowDemoView *fView = [[ShowDemoView alloc] init];
-    fView.backgroundColor = [UIColor redColor];
-    fView.showDemoViewScrollViewBlock = ^(UIView * _Nonnull view) {
-      
-        weakSelf.baseView.nowScrollView = view;
-    };
-    
-    ShowDemoView *sView = [[ShowDemoView alloc] init];
-    sView.backgroundColor = [UIColor greenColor];
-    sView.showDemoViewScrollViewBlock = ^(UIView * _Nonnull view) {
-      
-        weakSelf.baseView.nowScrollView = view;
-    };
-    
-    _baseView.showViewArrs = (NSMutableArray *)@[fView, sView];
+    self.navigationController.title = @"主页";
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 64) style:UITableViewStylePlain];
+    _tableView.dataSource = self;
+    _tableView.delegate = self;
+    [self.view addSubview:_tableView];
 }
 
-#pragma mark - <YXFuncScrollBaseViewDelegate>
-- (void)yxSwitchModuleByNowView:(UIView *)nowView index:(NSInteger)index {
+#pragma mark - <UITableViewDataSource, UITableViewDelegate>
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
+    return _dataSourceArr.count;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    static NSString * cellID = @"123yd";
+    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellID];
+    if (!cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
+    }
+    cell.textLabel.text = _dataSourceArr[indexPath.row];
+    return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == 0) {
+        YXFuncPinScrollViewController *vc = [[YXFuncPinScrollViewController alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if (indexPath.row == 1) {
+        YXFuncCycleScrollViewVC *vc = [[YXFuncCycleScrollViewVC alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else {
+        
+    }
 }
 
 @end
