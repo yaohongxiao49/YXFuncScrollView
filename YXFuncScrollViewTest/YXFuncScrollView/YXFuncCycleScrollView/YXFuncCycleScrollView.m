@@ -7,6 +7,7 @@
 //
 
 #import "YXFuncCycleScrollView.h"
+#import "YXPageControl.h"
 
 @interface YXFuncCycleScrollView () <UIScrollViewDelegate>
 
@@ -14,7 +15,7 @@
 @property (nonatomic, strong) NSMutableArray *imgViewsArr; //图片视图数组
 @property (nonatomic, strong) NSTimer *timer;
 @property (nonatomic, strong) UIView *pageBackView;
-@property (nonatomic, strong) UIPageControl *pageControl;
+@property (nonatomic, strong) YXPageControl *pageControl;
 
 @end
 
@@ -55,6 +56,12 @@
 - (void)processTimer {
 
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width *2, 0) animated:YES];
+}
+
+#pragma mark - 点击分页控制器
+- (void)changePageControl:(UIPageControl *)pageControl {
+    
+    self.currentPage = pageControl.currentPage;
 }
 
 #pragma mark - 单击
@@ -161,6 +168,7 @@
     _pageControl.numberOfPages = _imgValueArr.count;
     [self setImageFromImageNames];
 }
+
 #pragma mark - 是否含有定时器
 - (void)setBoolContainTimer:(BOOL)boolContainTimer {
     
@@ -175,6 +183,75 @@
     }
 }
 
+#pragma mark - 是否显示分页控制器
+- (void)setBoolShowPageControl:(BOOL)boolShowPageControl {
+    
+    _boolShowPageControl = boolShowPageControl;
+    _pageBackView.hidden =! _boolShowPageControl;
+}
+#pragma mark - 分页控制器坐标
+- (void)setPageframe:(CGRect)pageframe {
+    
+    _pageframe = pageframe;
+    _pageBackView.frame = _pageframe;
+}
+#pragma mark - 当前页码
+- (void)setCurrentPage:(NSInteger)currentPage {
+    
+    _currentPage = currentPage;
+    
+    for (NSInteger i = 0; i < _currentPage; i ++) {
+        if (i <= _pageControl.currentPage) {
+            [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width *2, 0)];
+        }
+        else {
+            [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
+        }
+    }
+}
+#pragma mark - 是否开启分页控制
+- (void)setBoolOpenPageControl:(BOOL)boolOpenPageControl {
+    
+    _boolOpenPageControl = boolOpenPageControl;
+    _pageControl.userInteractionEnabled = _boolOpenPageControl;
+}
+#pragma mark - 分页视图背景颜色
+- (void)setPageBgColor:(UIColor *)pageBgColor {
+    
+    _pageBgColor = pageBgColor;
+    _pageBackView.backgroundColor = _pageBgColor;
+}
+#pragma mark - 分页视图背景透明度
+- (void)setPageBgAlpha:(CGFloat)pageBgAlpha {
+    
+    _pageBgAlpha = pageBgAlpha;
+    _pageBackView.backgroundColor = [self.pageBgColor colorWithAlphaComponent:_pageBgAlpha];
+}
+#pragma mark - 普通分页颜色
+- (void)setNorPageColor:(UIColor *)norPageColor {
+    
+    _norPageColor = norPageColor;
+    _pageControl.pageIndicatorTintColor = _norPageColor;
+}
+#pragma mark - 选中分页颜色
+- (void)setSelPageColor:(UIColor *)selPageColor {
+    
+    _selPageColor = selPageColor;
+    _pageControl.currentPageIndicatorTintColor = _selPageColor;
+}
+#pragma mark - 普通分页图片
+- (void)setNorPageImg:(UIImage *)norPageImg {
+    
+    _norPageImg = norPageImg;
+    _pageControl.norImg = _norPageImg;
+}
+#pragma mark - 选中分页图片
+- (void)setSelPageImg:(UIImage *)selPageImg {
+    
+    _selPageImg = selPageImg;
+    _pageControl.selImg = _selPageImg;
+}
+
 #pragma mark - 初始化视图
 - (void)initView {
     
@@ -184,7 +261,7 @@
     [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width *3, _scrollView.frame.size.height)];
     _scrollView.backgroundColor = [UIColor clearColor];
     [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
-    _scrollView.showsHorizontalScrollIndicator = YES;
+    _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.pagingEnabled = YES;
     _scrollView.bounces = YES;
@@ -199,18 +276,18 @@
         [_imgViewsArr addObject:img];
     }
     
-    _pageBackView = [[UIView alloc] initWithFrame:CGRectMake(0, 224, CGRectGetWidth(self.bounds), 20)];
-    _pageBackView.alpha = 0.6;
-    _pageBackView.backgroundColor = [[UIColor clearColor] colorWithAlphaComponent:1];
+    _pageBackView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.bounds) - 20, CGRectGetWidth(self.bounds), 20)];
+    _pageBackView.backgroundColor = [[UIColor clearColor] colorWithAlphaComponent:0.6];
     [self addSubview:_pageBackView];
     
-    _pageControl = [[UIPageControl alloc] initWithFrame:CGRectMake(0, 0, 120, 30)];
+    _pageControl = [[YXPageControl alloc] initWithFrame:_pageBackView.bounds];
     _pageControl.center = CGPointMake(CGRectGetMidX(_pageBackView.bounds), CGRectGetMidY(_pageBackView.bounds));
     _pageControl.numberOfPages = _imgViewsArr.count;
     _pageControl.currentPageIndicatorTintColor = [UIColor blueColor];
     _pageControl.pageIndicatorTintColor = [UIColor whiteColor];
     _pageControl.currentPage = 0;
-    _pageControl.userInteractionEnabled = NO;
+    _pageControl.userInteractionEnabled = self.boolOpenPageControl;
+    [_pageControl addTarget:self action:@selector(changePageControl:) forControlEvents:UIControlEventTouchUpInside];
     [_pageBackView addSubview:_pageControl];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction:)];

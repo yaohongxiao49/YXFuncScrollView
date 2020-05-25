@@ -21,8 +21,10 @@
     
     YXFuncCycleScrollView *view = [[YXFuncCycleScrollView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 200)];
     view.backgroundColor = [UIColor whiteColor];
-    view.boolContainTimer = YES;
+    view.boolContainTimer = NO;
     view.timeInterval = 3;
+    view.selPageImg = [UIImage imageNamed:@"1"];
+    view.norPageImg = [UIImage imageNamed:@"1"];
     view.yxFuncCycleScrollViewBlock = ^(YXFuncCycleScrollViewValueInfoModel * _Nonnull model) {
       
         NSLog(@"imgUrl == %@", model.imgUrl);

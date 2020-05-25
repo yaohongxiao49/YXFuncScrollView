@@ -35,6 +35,7 @@
 		84EF3B24247B971C00C3CD7A /* 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B1C247B971C00C3CD7A /* 6.png */; };
 		84EF3B25247B971C00C3CD7A /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B1D247B971C00C3CD7A /* 2.png */; };
 		84EF3B2C247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EF3B2A247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m */; };
+		84EF3B32247BD07700C3CD7A /* YXPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EF3B31247BD07700C3CD7A /* YXPageControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -103,6 +104,8 @@
 		84EF3B1D247B971C00C3CD7A /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
 		84EF3B2A247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXFuncCycleScrollViewValueModel.m; sourceTree = "<group>"; };
 		84EF3B2B247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXFuncCycleScrollViewValueModel.h; sourceTree = "<group>"; };
+		84EF3B30247BD07700C3CD7A /* YXPageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXPageControl.h; sourceTree = "<group>"; };
+		84EF3B31247BD07700C3CD7A /* YXPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXPageControl.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +246,8 @@
 				84EF3B29247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel */,
 				848E9BE22477CDA4008E6EA2 /* YXFuncCycleScrollView.h */,
 				848E9BE32477CDA4008E6EA2 /* YXFuncCycleScrollView.m */,
+				84EF3B30247BD07700C3CD7A /* YXPageControl.h */,
+				84EF3B31247BD07700C3CD7A /* YXPageControl.m */,
 			);
 			path = YXFuncCycleScrollView;
 			sourceTree = "<group>";
@@ -423,6 +428,7 @@
 				848E9BCF2477CCF9008E6EA2 /* ShowHeaderView.m in Sources */,
 				84EF3B2C247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m in Sources */,
 				848E9BDD2477CD49008E6EA2 /* YXFuncScrollBaseTabSecHeaderView.m in Sources */,
+				84EF3B32247BD07700C3CD7A /* YXPageControl.m in Sources */,
 				848E9BDF2477CD49008E6EA2 /* YXFuncScrollBaseTabCell.m in Sources */,
 				848E9BE42477CDA4008E6EA2 /* YXFuncCycleScrollView.m in Sources */,
 				848E9BEB2477D012008E6EA2 /* YXFuncCycleScrollViewVC.m in Sources */,
