@@ -26,6 +26,15 @@
 		848E9BE42477CDA4008E6EA2 /* YXFuncCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 848E9BE32477CDA4008E6EA2 /* YXFuncCycleScrollView.m */; };
 		848E9BE72477CEC3008E6EA2 /* YXFuncPinScrollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 848E9BE62477CEC3008E6EA2 /* YXFuncPinScrollViewController.m */; };
 		848E9BEB2477D012008E6EA2 /* YXFuncCycleScrollViewVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 848E9BEA2477D012008E6EA2 /* YXFuncCycleScrollViewVC.m */; };
+		84EF3B1E247B971C00C3CD7A /* 1.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B16247B971C00C3CD7A /* 1.png */; };
+		84EF3B1F247B971C00C3CD7A /* 4.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B17247B971C00C3CD7A /* 4.png */; };
+		84EF3B20247B971C00C3CD7A /* 3.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B18247B971C00C3CD7A /* 3.png */; };
+		84EF3B21247B971C00C3CD7A /* 8.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B19247B971C00C3CD7A /* 8.png */; };
+		84EF3B22247B971C00C3CD7A /* 7.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B1A247B971C00C3CD7A /* 7.png */; };
+		84EF3B23247B971C00C3CD7A /* 5.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B1B247B971C00C3CD7A /* 5.png */; };
+		84EF3B24247B971C00C3CD7A /* 6.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B1C247B971C00C3CD7A /* 6.png */; };
+		84EF3B25247B971C00C3CD7A /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B1D247B971C00C3CD7A /* 2.png */; };
+		84EF3B2C247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EF3B2A247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -84,6 +93,16 @@
 		848E9BE62477CEC3008E6EA2 /* YXFuncPinScrollViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXFuncPinScrollViewController.m; sourceTree = "<group>"; };
 		848E9BE92477D012008E6EA2 /* YXFuncCycleScrollViewVC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXFuncCycleScrollViewVC.h; sourceTree = "<group>"; };
 		848E9BEA2477D012008E6EA2 /* YXFuncCycleScrollViewVC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXFuncCycleScrollViewVC.m; sourceTree = "<group>"; };
+		84EF3B16247B971C00C3CD7A /* 1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 1.png; sourceTree = "<group>"; };
+		84EF3B17247B971C00C3CD7A /* 4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 4.png; sourceTree = "<group>"; };
+		84EF3B18247B971C00C3CD7A /* 3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 3.png; sourceTree = "<group>"; };
+		84EF3B19247B971C00C3CD7A /* 8.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 8.png; sourceTree = "<group>"; };
+		84EF3B1A247B971C00C3CD7A /* 7.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 7.png; sourceTree = "<group>"; };
+		84EF3B1B247B971C00C3CD7A /* 5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 5.png; sourceTree = "<group>"; };
+		84EF3B1C247B971C00C3CD7A /* 6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 6.png; sourceTree = "<group>"; };
+		84EF3B1D247B971C00C3CD7A /* 2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 2.png; sourceTree = "<group>"; };
+		84EF3B2A247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXFuncCycleScrollViewValueModel.m; sourceTree = "<group>"; };
+		84EF3B2B247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXFuncCycleScrollViewValueModel.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +162,7 @@
 				843752DD2452B6D000EC71AF /* ViewController.m */,
 				848E9BE82477D006008E6EA2 /* YXFuncCycleScrollViewVC */,
 				848E9BC92477CCF9008E6EA2 /* YXFuncPinScrollViewVC */,
+				84EF3B15247B962700C3CD7A /* Img */,
 				843752DF2452B6D000EC71AF /* Main.storyboard */,
 				843752E22452B6D200EC71AF /* Assets.xcassets */,
 				843752E42452B6D200EC71AF /* LaunchScreen.storyboard */,
@@ -220,6 +240,7 @@
 		848E9BE12477CD8A008E6EA2 /* YXFuncCycleScrollView */ = {
 			isa = PBXGroup;
 			children = (
+				84EF3B29247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel */,
 				848E9BE22477CDA4008E6EA2 /* YXFuncCycleScrollView.h */,
 				848E9BE32477CDA4008E6EA2 /* YXFuncCycleScrollView.m */,
 			);
@@ -233,6 +254,30 @@
 				848E9BEA2477D012008E6EA2 /* YXFuncCycleScrollViewVC.m */,
 			);
 			path = YXFuncCycleScrollViewVC;
+			sourceTree = "<group>";
+		};
+		84EF3B15247B962700C3CD7A /* Img */ = {
+			isa = PBXGroup;
+			children = (
+				84EF3B16247B971C00C3CD7A /* 1.png */,
+				84EF3B1D247B971C00C3CD7A /* 2.png */,
+				84EF3B18247B971C00C3CD7A /* 3.png */,
+				84EF3B17247B971C00C3CD7A /* 4.png */,
+				84EF3B1B247B971C00C3CD7A /* 5.png */,
+				84EF3B1C247B971C00C3CD7A /* 6.png */,
+				84EF3B1A247B971C00C3CD7A /* 7.png */,
+				84EF3B19247B971C00C3CD7A /* 8.png */,
+			);
+			path = Img;
+			sourceTree = "<group>";
+		};
+		84EF3B29247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel */ = {
+			isa = PBXGroup;
+			children = (
+				84EF3B2B247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.h */,
+				84EF3B2A247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m */,
+			);
+			path = YXFuncCycleScrollViewValueModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -338,9 +383,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				84EF3B25247B971C00C3CD7A /* 2.png in Resources */,
 				843752E62452B6D200EC71AF /* LaunchScreen.storyboard in Resources */,
+				84EF3B1E247B971C00C3CD7A /* 1.png in Resources */,
 				843752E32452B6D200EC71AF /* Assets.xcassets in Resources */,
+				84EF3B20247B971C00C3CD7A /* 3.png in Resources */,
+				84EF3B24247B971C00C3CD7A /* 6.png in Resources */,
+				84EF3B1F247B971C00C3CD7A /* 4.png in Resources */,
 				843752E12452B6D000EC71AF /* Main.storyboard in Resources */,
+				84EF3B23247B971C00C3CD7A /* 5.png in Resources */,
+				84EF3B21247B971C00C3CD7A /* 8.png in Resources */,
+				84EF3B22247B971C00C3CD7A /* 7.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -368,6 +421,7 @@
 				843752DE2452B6D000EC71AF /* ViewController.m in Sources */,
 				848E9BDE2477CD49008E6EA2 /* YXFuncScrollBaseTabSecFooterView.m in Sources */,
 				848E9BCF2477CCF9008E6EA2 /* ShowHeaderView.m in Sources */,
+				84EF3B2C247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m in Sources */,
 				848E9BDD2477CD49008E6EA2 /* YXFuncScrollBaseTabSecHeaderView.m in Sources */,
 				848E9BDF2477CD49008E6EA2 /* YXFuncScrollBaseTabCell.m in Sources */,
 				848E9BE42477CDA4008E6EA2 /* YXFuncCycleScrollView.m in Sources */,

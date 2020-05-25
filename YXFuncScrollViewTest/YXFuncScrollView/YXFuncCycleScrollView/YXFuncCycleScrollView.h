@@ -7,12 +7,25 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "YXFuncCycleScrollViewValueModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef void(^YXFuncCycleScrollViewBlock)(YXFuncCycleScrollViewValueInfoModel *model);
+
 @interface YXFuncCycleScrollView : UIView
 
-@property (nonatomic, strong) NSMutableArray *imageNamesArr; //图片名数组
+/** 图片信息数组 */
+@property (nonatomic, strong) NSMutableArray *imgValueArr;
+
+#pragma mark - 定时器
+/** 是否含有定时器 */
+@property (nonatomic, assign) BOOL boolContainTimer;
+/** 时间间隔（需要先设置boolContainTimer） */
+@property (nonatomic, assign) CGFloat timeInterval;
+
+#pragma mark - 点击图片回调
+@property (nonatomic, copy) YXFuncCycleScrollViewBlock yxFuncCycleScrollViewBlock;
 
 @end
 
