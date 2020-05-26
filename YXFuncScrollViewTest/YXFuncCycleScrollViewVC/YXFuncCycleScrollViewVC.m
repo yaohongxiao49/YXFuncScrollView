@@ -19,12 +19,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    YXFuncCycleScrollView *view = [[YXFuncCycleScrollView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 200)];
-    view.backgroundColor = [UIColor whiteColor];
-    view.boolContainTimer = NO;
-    view.timeInterval = 3;
-    view.selPageImg = [UIImage imageNamed:@"1"];
-    view.norPageImg = [UIImage imageNamed:@"1"];
+    YXFuncCycleScrollView *view = [[YXFuncCycleScrollView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 200) showType:YXFuncCycleScrollViewTypeCard];
+    view.backgroundColor = [UIColor redColor];
+    view.edgeInsets = UIEdgeInsetsMake(10, 40, 10, 10);
+    view.cornerRadius = 10;
     view.yxFuncCycleScrollViewBlock = ^(YXFuncCycleScrollViewValueInfoModel * _Nonnull model) {
       
         NSLog(@"imgUrl == %@", model.imgUrl);

@@ -11,10 +11,24 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, YXFuncCycleScrollViewType) {
+    /** 铺满 */
+    YXFuncCycleScrollViewTypeFull,
+    /** 有边距 */
+    YXFuncCycleScrollViewTypeEdge,
+    /** 卡片式 */
+    YXFuncCycleScrollViewTypeCard,
+};
+
 typedef void(^YXFuncCycleScrollViewBlock)(YXFuncCycleScrollViewValueInfoModel *model);
 
 @interface YXFuncCycleScrollView : UIView
 
+/**
+ * 显示边距（充满/卡片式效果时设置）
+ * 如显示为卡片式效果，则需要优先设置（此时的宽度：屏幕宽度 - left，间距：right）
+ */
+@property (nonatomic, assign) UIEdgeInsets edgeInsets;
 /** 图片信息数组 */
 @property (nonatomic, strong) NSMutableArray *imgValueArr;
 
@@ -48,6 +62,18 @@ typedef void(^YXFuncCycleScrollViewBlock)(YXFuncCycleScrollViewValueInfoModel *m
 
 #pragma mark - 点击图片回调
 @property (nonatomic, copy) YXFuncCycleScrollViewBlock yxFuncCycleScrollViewBlock;
+
+/** 圆角 */
+@property (nonatomic, assign) CGFloat cornerRadius;
+
+#pragma mark - 初始化视图
+/**
+ * 初始化视图
+ * @param frame 显示尺寸
+ * @param showType 显示类型
+ */
+- (instancetype)initWithFrame:(CGRect)frame
+                     showType:(YXFuncCycleScrollViewType)showType;
 
 @end
 

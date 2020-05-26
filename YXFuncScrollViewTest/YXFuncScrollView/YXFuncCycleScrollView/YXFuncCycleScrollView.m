@@ -11,26 +11,35 @@
 
 @interface YXFuncCycleScrollView () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) UIScrollView *scrollView;
+@property (nonatomic, assign) YXFuncCycleScrollViewType showType; //显示类型
+@property (nonatomic, strong) UIScrollView *scrollView; //滚动视图
 @property (nonatomic, strong) NSMutableArray *imgViewsArr; //图片视图数组
-@property (nonatomic, strong) NSTimer *timer;
-@property (nonatomic, strong) UIView *pageBackView;
-@property (nonatomic, strong) YXPageControl *pageControl;
+@property (nonatomic, strong) NSTimer *timer; //时间控制器
+@property (nonatomic, strong) UIView *pageBackView; //分页背景视图
+@property (nonatomic, strong) YXPageControl *pageControl; //分页控制器
+@property (nonatomic, assign) CGFloat imgVWidth; //卡片式图片宽度
+@property (nonatomic, assign) CGFloat imgCriticalValue; //卡片式图片临界值
 
 @end
 
 @implementation YXFuncCycleScrollView
 
+#pragma mark - 移除Timer
 - (void)dealloc {
     
-    if (_timer) [self stopTimer];
+    if (_timer) {
+        [self stopTimer];
+    }
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
+#pragma mark - 初始化视图
+- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType {
     self = [super initWithFrame:frame];
     
     if (self) {
+        _showType = showType;
         [self initView];
+        _imgCriticalValue = _scrollView.bounds.size.width;
     }
     return self;
 }
@@ -52,10 +61,63 @@
     }
 }
 
+#pragma mark - 根据显示类型更改图片显示位置
+- (void)changeImgVShowFrame {
+    
+    __weak typeof(self) weakSelf = self;
+    __block CGFloat scrollViewWidth = _scrollView.frame.size.width;
+    __block CGFloat scrollViewHeight = _scrollView.frame.size.height;
+    __block CGFloat top = self.edgeInsets.top;
+    __block CGFloat left = self.edgeInsets.left;
+    __block CGFloat bottom = self.edgeInsets.bottom;
+    __block CGFloat right = self.edgeInsets.right;
+    
+    [_imgViewsArr enumerateObjectsUsingBlock:^(UIImageView *  _Nonnull imgV, NSUInteger idx, BOOL * _Nonnull stop) {
+
+        switch (weakSelf.showType) {
+            case YXFuncCycleScrollViewTypeFull: {
+                imgV.frame = CGRectMake(scrollViewWidth *idx, 0, scrollViewWidth, scrollViewHeight);
+                break;
+            }
+            case YXFuncCycleScrollViewTypeEdge: {
+                imgV.frame = CGRectMake(scrollViewWidth *idx + left, top, scrollViewWidth - (left + right), scrollViewHeight - (top + bottom));
+                imgV.clipsToBounds = YES;
+                break;
+            }
+            case YXFuncCycleScrollViewTypeCard: {
+                weakSelf.imgVWidth = scrollViewWidth - left;
+                imgV.frame = CGRectMake((weakSelf.imgVWidth + right) *idx, top, weakSelf.imgVWidth, scrollViewHeight - (top + bottom));
+                imgV.clipsToBounds = YES;
+                break;
+            }
+            default:
+                break;
+        }
+    }];
+    
+    if (_showType == YXFuncCycleScrollViewTypeCard) {
+        CGFloat contentSize = _imgVWidth != 0 ? weakSelf.imgVWidth : scrollViewWidth;
+        _imgCriticalValue = _imgVWidth != 0 ? (weakSelf.imgVWidth - right) : scrollViewWidth;
+        [_scrollView setContentSize:CGSizeMake(contentSize *_imgViewsArr.count + (right * (_imgViewsArr.count - 1)), scrollViewHeight)];
+        [_scrollView setContentOffset:CGPointMake(_imgCriticalValue, 0)];
+    }
+}
+
+#pragma mark - 更改图片显示圆角
+- (void)changeImgVShowCornerRadius {
+    
+    __weak typeof(self) weakSelf = self;
+    [_imgViewsArr enumerateObjectsUsingBlock:^(UIImageView *  _Nonnull imgV, NSUInteger idx, BOOL * _Nonnull stop) {
+
+        imgV.layer.cornerRadius = weakSelf.cornerRadius;
+        imgV.layer.masksToBounds = YES;
+    }];
+}
+
 #pragma mark - processTimer
 - (void)processTimer {
 
-    [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width *2, 0) animated:YES];
+    [_scrollView setContentOffset:CGPointMake(_imgCriticalValue *2, 0) animated:YES];
 }
 
 #pragma mark - 点击分页控制器
@@ -115,11 +177,12 @@
 #pragma mark - <UIScrollViewDelegate>
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    if (_scrollView.contentOffset.x >= 2 *_scrollView.frame.size.width) { //滑动到右边视图
+    NSLog(@"left == %@, scrollView.contentOffset.x == %@, right == %@", @(0), @(scrollView.contentOffset.x), @(2 *_imgCriticalValue));
+    if (scrollView.contentOffset.x >= 2 *_imgCriticalValue) { //滑动到右边视图
         [self updateLastValue];
         _pageControl.currentPage = _pageControl.currentPage == self.imgValueArr.count - 1 ? 0 : _pageControl.currentPage + 1;
     }
-    else if (_scrollView.contentOffset.x <= 0) { //滑动到左边视图
+    else if (scrollView.contentOffset.x <= 0) { //滑动到左边视图
         [self updateFirstValue];
         _pageControl.currentPage = _pageControl.currentPage == 0 ? self.imgValueArr.count - 1 : _pageControl.currentPage - 1;
     }
@@ -128,7 +191,7 @@
     }
     
     [self setImageFromImageNames];
-    [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
+    [scrollView setContentOffset:CGPointMake(_imgCriticalValue, 0)];
 }
 #pragma mark - 开始拖拽
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
@@ -202,10 +265,10 @@
     
     for (NSInteger i = 0; i < _currentPage; i ++) {
         if (i <= _pageControl.currentPage) {
-            [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width *2, 0)];
+            [_scrollView setContentOffset:CGPointMake(_imgCriticalValue *2, 0)];
         }
         else {
-            [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
+            [_scrollView setContentOffset:CGPointMake(_imgCriticalValue, 0)];
         }
     }
 }
@@ -252,6 +315,20 @@
     _pageControl.selImg = _selPageImg;
 }
 
+#pragma mark - 显示边距
+- (void)setEdgeInsets:(UIEdgeInsets)edgeInsets {
+    
+    _edgeInsets = edgeInsets;
+    [self changeImgVShowFrame];
+}
+
+#pragma mark - 显示圆角
+- (void)setCornerRadius:(CGFloat)cornerRadius {
+    
+    _cornerRadius = cornerRadius;
+    [self changeImgVShowCornerRadius];
+}
+
 #pragma mark - 初始化视图
 - (void)initView {
     
@@ -269,15 +346,16 @@
     [self addSubview:_scrollView];
     
     for (int i = 0; i < 3; i ++) {
-        UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(_scrollView.frame.size.width *i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height)];
-        img.contentMode = UIViewContentModeScaleAspectFill;
-        img.userInteractionEnabled = NO;
-        [_scrollView addSubview:img];
-        [_imgViewsArr addObject:img];
+        UIImageView *imgV = [[UIImageView alloc] init];
+        imgV.frame = CGRectMake(_scrollView.frame.size.width *i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+        imgV.contentMode = UIViewContentModeScaleAspectFill;
+        imgV.userInteractionEnabled = NO;
+        [_scrollView addSubview:imgV];
+        [_imgViewsArr addObject:imgV];
     }
     
     _pageBackView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.bounds) - 20, CGRectGetWidth(self.bounds), 20)];
-    _pageBackView.backgroundColor = [[UIColor clearColor] colorWithAlphaComponent:0.6];
+    _pageBackView.backgroundColor = [UIColor clearColor];
     [self addSubview:_pageBackView];
     
     _pageControl = [[YXPageControl alloc] initWithFrame:_pageBackView.bounds];
@@ -291,7 +369,7 @@
     [_pageBackView addSubview:_pageControl];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction:)];
-    [self.scrollView addGestureRecognizer:singleTap];
+    [_scrollView addGestureRecognizer:singleTap];
 }
 
 @end
