@@ -18,7 +18,8 @@
 @property (nonatomic, strong) UIView *pageBackView; //分页背景视图
 @property (nonatomic, strong) YXPageControl *pageControl; //分页控制器
 @property (nonatomic, assign) CGFloat imgVWidth; //卡片式图片宽度
-@property (nonatomic, assign) CGFloat imgCriticalValue; //卡片式图片临界值
+@property (nonatomic, assign) BOOL boolOpenTimer; //是否开启定时器
+@property (nonatomic, assign) CGFloat rollingDistance; //滚动距离
 
 @end
 
@@ -39,7 +40,7 @@
     if (self) {
         _showType = showType;
         [self initView];
-        _imgCriticalValue = _scrollView.bounds.size.width;
+        _rollingDistance = _scrollView.bounds.size.width;
     }
     return self;
 }
@@ -95,11 +96,13 @@
         }
     }];
     
+    CGFloat imgCriticalValue = _imgVWidth != 0 ? weakSelf.imgVWidth : scrollViewWidth;
+    _rollingDistance = _imgVWidth != 0 ? (imgCriticalValue + right) : scrollViewWidth;
     if (_showType == YXFuncCycleScrollViewTypeCard) {
-        CGFloat contentSize = _imgVWidth != 0 ? weakSelf.imgVWidth : scrollViewWidth;
-        _imgCriticalValue = _imgVWidth != 0 ? (weakSelf.imgVWidth - right) : scrollViewWidth;
-        [_scrollView setContentSize:CGSizeMake(contentSize *_imgViewsArr.count + (right * (_imgViewsArr.count - 1)), scrollViewHeight)];
-        [_scrollView setContentOffset:CGPointMake(_imgCriticalValue, 0)];
+        _scrollView.clipsToBounds = NO;
+        _scrollView.frame = CGRectMake(left /2, 0, _rollingDistance, scrollViewHeight);
+        [_scrollView setContentSize:CGSizeMake((imgCriticalValue + right) *_imgViewsArr.count, scrollViewHeight)];
+        [_scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
     }
 }
 
@@ -114,10 +117,33 @@
     }];
 }
 
+#pragma mark - 设置滚动范围
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    
+    UIView *view = [super hitTest:point withEvent:event];
+    
+    CGFloat scrollViewX = _scrollView.frame.origin.x;
+    CGFloat scrollViewY = _scrollView.frame.origin.y;
+    CGFloat scrollViewOffsetX = _scrollView.contentOffset.x;
+    CGFloat scrollViewOffsetY = _scrollView.contentOffset.y;
+    if ([view isEqual:self]) {
+        for (UIView *subview in _scrollView.subviews) {
+            CGPoint offset = CGPointMake(point.x - scrollViewX + scrollViewOffsetX - subview.frame.origin.x,
+                    point.y - scrollViewY + scrollViewOffsetY - subview.frame.origin.y);
+            if ((view = [subview hitTest:offset withEvent:event])) {
+                return view;
+            }
+        }
+        return _scrollView;
+    }
+    
+    return view;
+}
+
 #pragma mark - processTimer
 - (void)processTimer {
 
-    [_scrollView setContentOffset:CGPointMake(_imgCriticalValue *2, 0) animated:YES];
+    [_scrollView setContentOffset:CGPointMake(_rollingDistance *2, 0) animated:YES];
 }
 
 #pragma mark - 点击分页控制器
@@ -177,12 +203,12 @@
 #pragma mark - <UIScrollViewDelegate>
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    NSLog(@"left == %@, scrollView.contentOffset.x == %@, right == %@", @(0), @(scrollView.contentOffset.x), @(2 *_imgCriticalValue));
-    if (scrollView.contentOffset.x >= 2 *_imgCriticalValue) { //滑动到右边视图
+    CGFloat offsetX = scrollView.contentOffset.x;
+    if (offsetX >= 2 *_rollingDistance) { //滑动到右边视图
         [self updateLastValue];
         _pageControl.currentPage = _pageControl.currentPage == self.imgValueArr.count - 1 ? 0 : _pageControl.currentPage + 1;
     }
-    else if (scrollView.contentOffset.x <= 0) { //滑动到左边视图
+    else if (offsetX <= 0) { //滑动到左边视图
         [self updateFirstValue];
         _pageControl.currentPage = _pageControl.currentPage == 0 ? self.imgValueArr.count - 1 : _pageControl.currentPage - 1;
     }
@@ -191,17 +217,19 @@
     }
     
     [self setImageFromImageNames];
-    [scrollView setContentOffset:CGPointMake(_imgCriticalValue, 0)];
+    [scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
 }
-#pragma mark - 开始拖拽
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     
-    [self closeTimer];
+    if (_boolOpenTimer) {
+        [self closeTimer];
+    }
 }
-#pragma mark - 结束拖拽
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     
-    [self openTimer];
+    if (_boolOpenTimer) {
+        [self openTimer];
+    }
 }
 
 #pragma mark - setting
@@ -213,6 +241,7 @@
     if (_imgValueArr.count == 0) {
         [self closeTimer];
         _pageBackView.hidden = YES;
+        _boolOpenTimer = NO;
         return;
     }
     else if (_imgValueArr.count == 1) {
@@ -221,11 +250,13 @@
         _pageBackView.hidden = YES;
         _scrollView.scrollEnabled = NO;
         [self closeTimer];
+        _boolOpenTimer = NO;
     }
     else {
         _pageBackView.hidden = NO;
         _scrollView.scrollEnabled = YES;
         [self updateFirstValue];
+        _boolOpenTimer = YES;
     }
     
     _pageControl.numberOfPages = _imgValueArr.count;
@@ -243,6 +274,7 @@
     _timeInterval = timeInterval;
     if (self.boolContainTimer) {
         _timer = [NSTimer scheduledTimerWithTimeInterval:_timeInterval target:self selector:@selector(processTimer) userInfo:nil repeats:YES];
+        _boolOpenTimer = YES;
     }
 }
 
@@ -265,10 +297,10 @@
     
     for (NSInteger i = 0; i < _currentPage; i ++) {
         if (i <= _pageControl.currentPage) {
-            [_scrollView setContentOffset:CGPointMake(_imgCriticalValue *2, 0)];
+            [_scrollView setContentOffset:CGPointMake(_rollingDistance *2, 0)];
         }
         else {
-            [_scrollView setContentOffset:CGPointMake(_imgCriticalValue, 0)];
+            [_scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
         }
     }
 }
@@ -332,6 +364,7 @@
 #pragma mark - 初始化视图
 - (void)initView {
     
+    self.clipsToBounds = YES;
     _imgViewsArr = [[NSMutableArray alloc] init];
     
     _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
