@@ -12,6 +12,7 @@
 @interface YXFuncCycleScrollView () <UIScrollViewDelegate>
 
 @property (nonatomic, assign) YXFuncCycleScrollViewType showType; //显示类型
+@property (nonatomic, assign) BOOL boolHorizontal; //滚动方向是否为水平滚动
 @property (nonatomic, strong) UIScrollView *scrollView; //滚动视图
 @property (nonatomic, strong) NSMutableArray *imgViewsArr; //图片视图数组
 @property (nonatomic, strong) NSTimer *timer; //时间控制器
@@ -19,7 +20,7 @@
 @property (nonatomic, strong) YXPageControl *pageControl; //分页控制器
 @property (nonatomic, strong) UIButton *pageBtn; //分页计算按钮
 @property (nonatomic, assign) BOOL boolOpenTimer; //是否开启定时器
-@property (nonatomic, assign) CGFloat imgVWidth; //卡片式图片宽度
+@property (nonatomic, assign) CGFloat imgVSize; //卡片式图片尺寸
 @property (nonatomic, assign) CGFloat rollingDistance; //滚动距离
 
 @end
@@ -35,13 +36,15 @@
 }
 
 #pragma mark - 初始化视图
-- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType {
+- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType directionType:(YXFuncCycleScrollViewDirectionType)directionType {
     self = [super initWithFrame:frame];
     
     if (self) {
         _showType = showType;
+        _boolHorizontal = directionType == YXFuncCycleScrollViewDirectionTypeHorizontal ? YES : NO;
+        
         [self initView];
-        _rollingDistance = _scrollView.bounds.size.width;
+        _rollingDistance = _boolHorizontal ? _scrollView.bounds.size.width : _scrollView.bounds.size.height;
     }
     return self;
 }
@@ -77,36 +80,70 @@
     __block CGFloat bottom = self.edgeInsets.bottom;
     __block CGFloat right = self.edgeInsets.right;
     
-    [_imgViewsArr enumerateObjectsUsingBlock:^(UIImageView *  _Nonnull imgV, NSUInteger idx, BOOL * _Nonnull stop) {
-
-        switch (weakSelf.showType) {
-            case YXFuncCycleScrollViewTypeFull: {
-                imgV.frame = CGRectMake(scrollViewWidth *idx, 0, scrollViewWidth, scrollViewHeight);
-                break;
+    if (_boolHorizontal) {
+        [_imgViewsArr enumerateObjectsUsingBlock:^(UIImageView *  _Nonnull imgV, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            switch (weakSelf.showType) {
+                case YXFuncCycleScrollViewTypeFull: {
+                    imgV.frame = CGRectMake(scrollViewWidth *idx, 0, scrollViewWidth, scrollViewHeight);
+                    break;
+                }
+                case YXFuncCycleScrollViewTypeEdge: {
+                    imgV.frame = CGRectMake(scrollViewWidth *idx + left, top, scrollViewWidth - (left + right), scrollViewHeight - (top + bottom));
+                    imgV.clipsToBounds = YES;
+                    break;
+                }
+                case YXFuncCycleScrollViewTypeCard: {
+                    weakSelf.imgVSize = scrollViewWidth - left;
+                    imgV.frame = CGRectMake((weakSelf.imgVSize + right) *idx, top, weakSelf.imgVSize, scrollViewHeight - (top + bottom));
+                    imgV.clipsToBounds = YES;
+                    break;
+                }
+                default:
+                    break;
             }
-            case YXFuncCycleScrollViewTypeEdge: {
-                imgV.frame = CGRectMake(scrollViewWidth *idx + left, top, scrollViewWidth - (left + right), scrollViewHeight - (top + bottom));
-                imgV.clipsToBounds = YES;
-                break;
-            }
-            case YXFuncCycleScrollViewTypeCard: {
-                weakSelf.imgVWidth = scrollViewWidth - left;
-                imgV.frame = CGRectMake((weakSelf.imgVWidth + right) *idx, top, weakSelf.imgVWidth, scrollViewHeight - (top + bottom));
-                imgV.clipsToBounds = YES;
-                break;
-            }
-            default:
-                break;
+        }];
+        
+        CGFloat imgCriticalValue = _imgVSize != 0 ? weakSelf.imgVSize : scrollViewWidth;
+        _rollingDistance = _imgVSize != 0 ? (imgCriticalValue + right) : scrollViewWidth;
+        if (_showType == YXFuncCycleScrollViewTypeCard) {
+            _scrollView.clipsToBounds = NO;
+            _scrollView.frame = CGRectMake(left /2, 0, _rollingDistance, scrollViewHeight);
+            [_scrollView setContentSize:CGSizeMake((imgCriticalValue + right) *_imgViewsArr.count, scrollViewHeight)];
+            [_scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
         }
-    }];
-    
-    CGFloat imgCriticalValue = _imgVWidth != 0 ? weakSelf.imgVWidth : scrollViewWidth;
-    _rollingDistance = _imgVWidth != 0 ? (imgCriticalValue + right) : scrollViewWidth;
-    if (_showType == YXFuncCycleScrollViewTypeCard) {
-        _scrollView.clipsToBounds = NO;
-        _scrollView.frame = CGRectMake(left /2, 0, _rollingDistance, scrollViewHeight);
-        [_scrollView setContentSize:CGSizeMake((imgCriticalValue + right) *_imgViewsArr.count, scrollViewHeight)];
-        [_scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
+    }
+    else {
+        [_imgViewsArr enumerateObjectsUsingBlock:^(UIImageView *  _Nonnull imgV, NSUInteger idx, BOOL * _Nonnull stop) {
+            switch (weakSelf.showType) {
+                case YXFuncCycleScrollViewTypeFull: {
+                    imgV.frame = CGRectMake(0, scrollViewHeight *idx, scrollViewWidth, scrollViewHeight);
+                    break;
+                }
+                case YXFuncCycleScrollViewTypeEdge: {
+                    imgV.frame = CGRectMake(left, scrollViewHeight *idx + top, scrollViewWidth - (left + right), scrollViewHeight - (top + bottom));
+                    imgV.clipsToBounds = YES;
+                    break;
+                }
+                case YXFuncCycleScrollViewTypeCard: {
+                    weakSelf.imgVSize = scrollViewHeight - top;
+                    imgV.frame = CGRectMake(left, (weakSelf.imgVSize + bottom) *idx, scrollViewWidth - (left + right), weakSelf.imgVSize);
+                    imgV.clipsToBounds = YES;
+                    break;
+                }
+                default:
+                    break;
+            }
+        }];
+        
+        CGFloat imgCriticalValue = _imgVSize != 0 ? weakSelf.imgVSize : scrollViewHeight;
+        _rollingDistance = _imgVSize != 0 ? (imgCriticalValue + bottom) : scrollViewHeight;
+        if (_showType == YXFuncCycleScrollViewTypeCard) {
+            _scrollView.clipsToBounds = NO;
+            _scrollView.frame = CGRectMake(0, top /2, scrollViewWidth, _rollingDistance);
+            [_scrollView setContentSize:CGSizeMake(scrollViewWidth, (imgCriticalValue + bottom) *_imgViewsArr.count)];
+            [_scrollView setContentOffset:CGPointMake(0, _rollingDistance)];
+        }
     }
 }
 
@@ -133,7 +170,7 @@
     if ([view isEqual:self]) {
         for (UIView *subview in _scrollView.subviews) {
             CGPoint offset = CGPointMake(point.x - scrollViewX + scrollViewOffsetX - subview.frame.origin.x,
-                    point.y - scrollViewY + scrollViewOffsetY - subview.frame.origin.y);
+                                         point.y - scrollViewY + scrollViewOffsetY - subview.frame.origin.y);
             if ((view = [subview hitTest:offset withEvent:event])) {
                 return view;
             }
@@ -147,7 +184,12 @@
 #pragma mark - processTimer
 - (void)processTimer {
 
-    [_scrollView setContentOffset:CGPointMake(_rollingDistance *2, 0) animated:YES];
+    if (_boolHorizontal) {
+        [_scrollView setContentOffset:CGPointMake(_rollingDistance *2, 0) animated:YES];
+    }
+    else {
+        [_scrollView setContentOffset:CGPointMake(0, _rollingDistance *2) animated:YES];
+    }
 }
 
 #pragma mark - 点击分页控制器
@@ -215,12 +257,19 @@
 #pragma mark - <UIScrollViewDelegate>
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     
-    CGFloat offsetX = scrollView.contentOffset.x;
-    if (offsetX >= 2 *_rollingDistance) { //滑动到右边视图
+    CGFloat offsetOrigin = 0.f;
+    if (_boolHorizontal) {
+        offsetOrigin = scrollView.contentOffset.x;
+    }
+    else {
+        offsetOrigin = scrollView.contentOffset.y;
+    }
+    
+    if (offsetOrigin >= 2 *_rollingDistance) { //滑动到右边视图
         [self updateLastValue];
         _pageControl.currentPage = _pageControl.currentPage == self.imgValueArr.count - 1 ? 0 : _pageControl.currentPage + 1;
     }
-    else if (offsetX <= 0) { //滑动到左边视图
+    else if (offsetOrigin <= 0) { //滑动到左边视图
         [self updateFirstValue];
         _pageControl.currentPage = _pageControl.currentPage == 0 ? self.imgValueArr.count - 1 : _pageControl.currentPage - 1;
     }
@@ -229,7 +278,12 @@
     }
     
     [self setImageFromImageNames];
-    [scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
+    if (_boolHorizontal) {
+        [scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
+    }
+    else {
+        [scrollView setContentOffset:CGPointMake(0, _rollingDistance)];
+    }
 }
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
     
@@ -308,11 +362,21 @@
     _currentPage = currentPage;
     
     for (NSInteger i = 0; i < _currentPage; i ++) {
-        if (i <= _pageControl.currentPage) {
-            [_scrollView setContentOffset:CGPointMake(_rollingDistance *2, 0)];
+        if (_boolHorizontal) {
+            if (i <= _pageControl.currentPage) {
+                [_scrollView setContentOffset:CGPointMake(_rollingDistance *2, 0)];
+            }
+            else {
+                [_scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
+            }
         }
         else {
-            [_scrollView setContentOffset:CGPointMake(_rollingDistance, 0)];
+            if (i <= _pageControl.currentPage) {
+                [_scrollView setContentOffset:CGPointMake(0, _rollingDistance *2)];
+            }
+            else {
+                [_scrollView setContentOffset:CGPointMake(0, _rollingDistance)];
+            }
         }
     }
 }
@@ -380,9 +444,15 @@
     _imgViewsArr = [[NSMutableArray alloc] init];
     
     _scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
-    [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width *3, _scrollView.frame.size.height)];
+    if (_boolHorizontal) {
+        [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width *3, _scrollView.frame.size.height)];
+        [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
+    }
+    else {
+        [_scrollView setContentSize:CGSizeMake(_scrollView.frame.size.width, _scrollView.frame.size.height *3)];
+        [_scrollView setContentOffset:CGPointMake(0, _scrollView.frame.size.height)];
+    }
     _scrollView.backgroundColor = [UIColor clearColor];
-    [_scrollView setContentOffset:CGPointMake(_scrollView.frame.size.width, 0)];
     _scrollView.showsHorizontalScrollIndicator = NO;
     _scrollView.showsVerticalScrollIndicator = NO;
     _scrollView.pagingEnabled = YES;
@@ -392,7 +462,12 @@
     
     for (int i = 0; i < 3; i ++) {
         UIImageView *imgV = [[UIImageView alloc] init];
-        imgV.frame = CGRectMake(_scrollView.frame.size.width *i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+        if (_boolHorizontal) {
+            imgV.frame = CGRectMake(_scrollView.frame.size.width *i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+        }
+        else {
+            imgV.frame = CGRectMake(0, _scrollView.frame.size.height *i, _scrollView.frame.size.width, _scrollView.frame.size.height);
+        }
         imgV.contentMode = UIViewContentModeScaleAspectFill;
         imgV.userInteractionEnabled = NO;
         [_scrollView addSubview:imgV];
