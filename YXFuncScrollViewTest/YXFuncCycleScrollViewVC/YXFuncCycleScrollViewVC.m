@@ -31,6 +31,8 @@
     
     NSArray *arr = [YXFuncCycleScrollViewValueModel arrayOfModelsFromDictionaries:@[@{@"imgUrl":@"1"}, @{@"imgUrl":@"2"}, @{@"imgUrl":@"3"}, @{@"imgUrl":@"4"}]];
     view.imgValueArr = [[NSMutableArray alloc] initWithArray:arr];
+    
+    view.currentPage = 3;
 }
 
 @end

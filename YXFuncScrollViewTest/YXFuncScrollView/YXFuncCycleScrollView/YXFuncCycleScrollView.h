@@ -20,7 +20,10 @@ typedef NS_ENUM(NSUInteger, YXFuncCycleScrollViewType) {
     YXFuncCycleScrollViewTypeCard,
 };
 
+/** 点击 */
 typedef void(^YXFuncCycleScrollViewBlock)(YXFuncCycleScrollViewValueInfoModel *model);
+/** 滚动 */
+typedef void(^YXFuncCycleScrollViewMoveBlock)(NSInteger page);
 
 @interface YXFuncCycleScrollView : UIView
 
@@ -43,7 +46,7 @@ typedef void(^YXFuncCycleScrollViewBlock)(YXFuncCycleScrollViewValueInfoModel *m
 @property (nonatomic, assign) BOOL boolShowPageControl;
 /** 分页控制器坐标 */
 @property (nonatomic, assign) CGRect pageframe;
-/** 分页控制器当前页码（需要在设置了imgValueArr后，设置才有用） */
+/** 分页控制器当前页码（需要在设置了imgValueArr后，设置才可使用，起始值为0） */
 @property (nonatomic, assign) NSInteger currentPage;
 /** 是否开启分页控制（默认关闭，此功能暂时不能使用） */
 @property (nonatomic, assign) BOOL boolOpenPageControl;
@@ -60,8 +63,10 @@ typedef void(^YXFuncCycleScrollViewBlock)(YXFuncCycleScrollViewValueInfoModel *m
 /** 选中分页图片 */
 @property (nonatomic, strong) UIImage *selPageImg;
 
-#pragma mark - 点击图片回调
+/** 点击图片回调 */
 @property (nonatomic, copy) YXFuncCycleScrollViewBlock yxFuncCycleScrollViewBlock;
+/** 滚动视图回调 */
+@property (nonatomic, copy) YXFuncCycleScrollViewMoveBlock yxFuncCycleScrollViewMoveBlock;
 
 /** 圆角 */
 @property (nonatomic, assign) CGFloat cornerRadius;

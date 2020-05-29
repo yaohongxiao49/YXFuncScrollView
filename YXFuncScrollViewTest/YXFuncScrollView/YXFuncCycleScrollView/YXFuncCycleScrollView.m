@@ -17,8 +17,9 @@
 @property (nonatomic, strong) NSTimer *timer; //时间控制器
 @property (nonatomic, strong) UIView *pageBackView; //分页背景视图
 @property (nonatomic, strong) YXPageControl *pageControl; //分页控制器
-@property (nonatomic, assign) CGFloat imgVWidth; //卡片式图片宽度
+@property (nonatomic, strong) UIButton *pageBtn; //分页计算按钮
 @property (nonatomic, assign) BOOL boolOpenTimer; //是否开启定时器
+@property (nonatomic, assign) CGFloat imgVWidth; //卡片式图片宽度
 @property (nonatomic, assign) CGFloat rollingDistance; //滚动距离
 
 @end
@@ -60,6 +61,9 @@
         }
         i++;
     }
+    [_pageBtn setTitle:[NSString stringWithFormat:@" %@/%@ ", @(_pageControl.currentPage + 1), @(self.imgValueArr.count)] forState:UIControlStateNormal];
+    
+    [self scrollViewBlock];
 }
 
 #pragma mark - 根据显示类型更改图片显示位置
@@ -152,7 +156,7 @@
     self.currentPage = pageControl.currentPage;
 }
 
-#pragma mark - 单击
+#pragma mark - 单击图片
 - (void)singleTapAction:(UITapGestureRecognizer *)gesture {
     
     if (self.yxFuncCycleScrollViewBlock) {
@@ -164,6 +168,14 @@
             infoModel = self.imgValueArr.firstObject;
         }
         self.yxFuncCycleScrollViewBlock(infoModel);
+    }
+}
+
+#pragma mark - 滚动视图block
+- (void)scrollViewBlock {
+    
+    if (self.yxFuncCycleScrollViewMoveBlock) {
+        self.yxFuncCycleScrollViewMoveBlock(_pageControl.currentPage);
     }
 }
 
@@ -400,6 +412,15 @@
     _pageControl.userInteractionEnabled = self.boolOpenPageControl;
     [_pageControl addTarget:self action:@selector(changePageControl:) forControlEvents:UIControlEventTouchUpInside];
     [_pageBackView addSubview:_pageControl];
+    
+    _pageBtn = [UIButton buttonWithType:UIButtonTypeSystem];
+    _pageBtn.frame = CGRectMake(self.bounds.size.width - 40, 20, 30, 22);
+    [_pageBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_pageBtn.titleLabel setFont:[UIFont systemFontOfSize:12]];
+    _pageBtn.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.3];
+    _pageBtn.layer.cornerRadius = 11;
+    _pageBtn.layer.masksToBounds = YES;
+    [self addSubview:_pageBtn];
     
     UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction:)];
     [_scrollView addGestureRecognizer:singleTap];
