@@ -8,8 +8,11 @@
 
 #import "YXFuncCycleScrollViewVC.h"
 #import "YXFuncCycleScrollView.h"
+#import "YXEntertainingDiversionsView.h"
 
 @interface YXFuncCycleScrollViewVC ()
+
+@property (nonatomic, strong) YXEntertainingDiversionsView *entertainingDiversionsView;
 
 @end
 
@@ -19,7 +22,28 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-//    YXFuncCycleScrollView *view = [[YXFuncCycleScrollView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 200) showType:YXFuncCycleScrollViewTypeCard directionType:YXFuncCycleScrollViewDirectionTypeHorizontal];
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    [self initEntertainingView];
+    [self initBannerView];
+}
+
+#pragma mark - 跑马灯
+- (void)initEntertainingView {
+    
+    NSString *title = @"太阳上山，一哟儿喂！太阳下山，一喽儿喂！";
+    _entertainingDiversionsView = [[YXEntertainingDiversionsView alloc] initWithFrame:CGRectMake(100, 120, self.view.bounds.size.width - 200, 30) maskType:YXEntertainingDiversionsMaskTypeRight textAlignment:YXEntertainingDiversionsViewScrollAlignmentCenter];
+    _entertainingDiversionsView.textColor = [UIColor redColor];
+    _entertainingDiversionsView.font = [UIFont systemFontOfSize:20];
+    [self.view addSubview:_entertainingDiversionsView];
+    
+    _entertainingDiversionsView.text = title;
+}
+
+#pragma mark - banner
+- (void)initBannerView {
+    
+    //    YXFuncCycleScrollView *view = [[YXFuncCycleScrollView alloc] initWithFrame:CGRectMake(0, 100, self.view.bounds.size.width, 200) showType:YXFuncCycleScrollViewTypeCard directionType:YXFuncCycleScrollViewDirectionTypeHorizontal];
     YXFuncCycleScrollView *view = [[YXFuncCycleScrollView alloc] initWithFrame:CGRectMake(0, 200, self.view.bounds.size.width, 400) showType:YXFuncCycleScrollViewTypeCard directionType:YXFuncCycleScrollViewDirectionTypeVertical];
     view.backgroundColor = [UIColor redColor];
     view.edgeInsets = UIEdgeInsetsMake(40, 10, 10, 10);

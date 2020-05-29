@@ -36,6 +36,7 @@
 		84EF3B25247B971C00C3CD7A /* 2.png in Resources */ = {isa = PBXBuildFile; fileRef = 84EF3B1D247B971C00C3CD7A /* 2.png */; };
 		84EF3B2C247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EF3B2A247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m */; };
 		84EF3B32247BD07700C3CD7A /* YXPageControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 84EF3B31247BD07700C3CD7A /* YXPageControl.m */; };
+		84FE81872480F04000C08F4B /* YXEntertainingDiversionsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 84FE81862480F04000C08F4B /* YXEntertainingDiversionsView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,8 @@
 		84EF3B2B247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXFuncCycleScrollViewValueModel.h; sourceTree = "<group>"; };
 		84EF3B30247BD07700C3CD7A /* YXPageControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXPageControl.h; sourceTree = "<group>"; };
 		84EF3B31247BD07700C3CD7A /* YXPageControl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXPageControl.m; sourceTree = "<group>"; };
+		84FE81852480F04000C08F4B /* YXEntertainingDiversionsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = YXEntertainingDiversionsView.h; sourceTree = "<group>"; };
+		84FE81862480F04000C08F4B /* YXEntertainingDiversionsView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = YXEntertainingDiversionsView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,8 +166,8 @@
 				843752DA2452B6D000EC71AF /* SceneDelegate.m */,
 				843752DC2452B6D000EC71AF /* ViewController.h */,
 				843752DD2452B6D000EC71AF /* ViewController.m */,
-				848E9BE82477D006008E6EA2 /* YXFuncCycleScrollViewVC */,
 				848E9BC92477CCF9008E6EA2 /* YXFuncPinScrollViewVC */,
+				848E9BE82477D006008E6EA2 /* YXFuncCycleScrollViewVC */,
 				84EF3B15247B962700C3CD7A /* Img */,
 				843752DF2452B6D000EC71AF /* Main.storyboard */,
 				843752E22452B6D200EC71AF /* Assets.xcassets */,
@@ -196,8 +199,9 @@
 		8437530E2452BACC00EC71AF /* YXFuncScrollView */ = {
 			isa = PBXGroup;
 			children = (
-				848E9BE12477CD8A008E6EA2 /* YXFuncCycleScrollView */,
 				848E9BD02477CD49008E6EA2 /* YXFuncPinScrollView */,
+				848E9BE12477CD8A008E6EA2 /* YXFuncCycleScrollView */,
+				84FE81842480F02200C08F4B /* YXEntertainingDiversionsView */,
 			);
 			path = YXFuncScrollView;
 			sourceTree = "<group>";
@@ -283,6 +287,15 @@
 				84EF3B2A247BA82200C3CD7A /* YXFuncCycleScrollViewValueModel.m */,
 			);
 			path = YXFuncCycleScrollViewValueModel;
+			sourceTree = "<group>";
+		};
+		84FE81842480F02200C08F4B /* YXEntertainingDiversionsView */ = {
+			isa = PBXGroup;
+			children = (
+				84FE81852480F04000C08F4B /* YXEntertainingDiversionsView.h */,
+				84FE81862480F04000C08F4B /* YXEntertainingDiversionsView.m */,
+			);
+			path = YXEntertainingDiversionsView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -431,6 +444,7 @@
 				84EF3B32247BD07700C3CD7A /* YXPageControl.m in Sources */,
 				848E9BDF2477CD49008E6EA2 /* YXFuncScrollBaseTabCell.m in Sources */,
 				848E9BE42477CDA4008E6EA2 /* YXFuncCycleScrollView.m in Sources */,
+				84FE81872480F04000C08F4B /* YXEntertainingDiversionsView.m in Sources */,
 				848E9BEB2477D012008E6EA2 /* YXFuncCycleScrollViewVC.m in Sources */,
 				848E9BCE2477CCF9008E6EA2 /* ShowDemoView.m in Sources */,
 				848E9BDC2477CD49008E6EA2 /* YXFuncScrollBaseView.m in Sources */,

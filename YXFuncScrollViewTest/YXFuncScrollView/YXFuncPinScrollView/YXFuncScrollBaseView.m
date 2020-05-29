@@ -73,13 +73,8 @@
     _isCellScroll = NO;
     
     if (!_boolHasNavi) {
-        if (@available(iOS 11.0, *)) {
-            self.baseScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-            self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-        }
-        else {
-            _baseVC.automaticallyAdjustsScrollViewInsets = NO;
-        }
+        self.baseScrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
 }
 

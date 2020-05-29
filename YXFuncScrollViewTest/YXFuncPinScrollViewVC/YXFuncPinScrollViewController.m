@@ -23,6 +23,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     __weak typeof(self) weakSelf = self;
     CGFloat naviHeight = 88;
     _baseView = [[YXFuncScrollBaseView alloc] initWithFrame:CGRectMake(0, naviHeight, self.view.bounds.size.width, self.view.bounds.size.height - naviHeight) baseVC:self boolHasNavi:YES boolContainFrash:NO];

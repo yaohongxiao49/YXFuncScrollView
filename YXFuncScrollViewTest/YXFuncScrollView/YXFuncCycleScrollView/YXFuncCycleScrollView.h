@@ -45,6 +45,8 @@ typedef void(^YXFuncCycleScrollViewMoveBlock)(NSInteger page);
 @property (nonatomic, assign) UIEdgeInsets edgeInsets;
 /** 图片信息数组 */
 @property (nonatomic, strong) NSMutableArray *imgValueArr;
+/** 圆角 */
+@property (nonatomic, assign) CGFloat cornerRadius;
 
 #pragma mark - 定时器
 /** 是否含有定时器（设置完成后，需要再设置timeInterval） */
@@ -74,13 +76,11 @@ typedef void(^YXFuncCycleScrollViewMoveBlock)(NSInteger page);
 /** 选中分页图片 */
 @property (nonatomic, strong) UIImage *selPageImg;
 
+#pragma mark - 回调
 /** 点击图片回调 */
 @property (nonatomic, copy) YXFuncCycleScrollViewBlock yxFuncCycleScrollViewBlock;
 /** 滚动视图回调 */
 @property (nonatomic, copy) YXFuncCycleScrollViewMoveBlock yxFuncCycleScrollViewMoveBlock;
-
-/** 圆角 */
-@property (nonatomic, assign) CGFloat cornerRadius;
 
 #pragma mark - 初始化视图
 /**
