@@ -86,6 +86,7 @@
             switch (weakSelf.showType) {
                 case YXFuncCycleScrollViewTypeFull: {
                     imgV.frame = CGRectMake(scrollViewWidth *idx, 0, scrollViewWidth, scrollViewHeight);
+                    imgV.clipsToBounds = YES;
                     break;
                 }
                 case YXFuncCycleScrollViewTypeEdge: {
@@ -118,6 +119,7 @@
             switch (weakSelf.showType) {
                 case YXFuncCycleScrollViewTypeFull: {
                     imgV.frame = CGRectMake(0, scrollViewHeight *idx, scrollViewWidth, scrollViewHeight);
+                    imgV.clipsToBounds = YES;
                     break;
                 }
                 case YXFuncCycleScrollViewTypeEdge: {
