@@ -17,8 +17,10 @@ typedef NS_ENUM(NSUInteger, YXFuncCycleScrollViewType) {
     YXFuncCycleScrollViewTypeFull,
     /** 有边距 */
     YXFuncCycleScrollViewTypeEdge,
-    /** 卡片式 */
+    /** 同等大小-卡片式 */
     YXFuncCycleScrollViewTypeCard,
+    /** 中心放大-卡片式 */
+    YXFuncCycleScrollViewTypeAmplificationCard,
 };
 
 /** 滚动方向 */
@@ -88,10 +90,12 @@ typedef void(^YXFuncCycleScrollViewMoveBlock)(NSInteger page);
  * @param frame 显示尺寸
  * @param showType 显示类型
  * @param directionType 滚动方向
+ * @param boolCycle 是否循环滚动
  */
 - (instancetype)initWithFrame:(CGRect)frame
                      showType:(YXFuncCycleScrollViewType)showType
-                directionType:(YXFuncCycleScrollViewDirectionType)directionType;
+                directionType:(YXFuncCycleScrollViewDirectionType)directionType
+                    boolCycle:(NSInteger)boolCycle;
 
 @end
 
