@@ -23,6 +23,8 @@
 @property (nonatomic, assign) CGFloat imgVSize; //卡片式图片尺寸
 @property (nonatomic, assign) CGFloat rollingDistance; //滚动距离
 @property (nonatomic, assign) BOOL boolCycle; //是否循环滚动
+@property (nonatomic, assign) CGFloat zoomRadio; //3D卡片效果放大倍数
+@property (nonatomic, assign) NSInteger alreadCurrent; //上一次的下标
 
 @end
 
@@ -37,13 +39,14 @@
 }
 
 #pragma mark - 初始化视图
-- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType directionType:(YXFuncCycleScrollViewDirectionType)directionType boolCycle:(NSInteger)boolCycle {
+- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType directionType:(YXFuncCycleScrollViewDirectionType)directionType boolCycle:(NSInteger)boolCycle zoomRadio:(CGFloat)zoomRadio {
     self = [super initWithFrame:frame];
     
     if (self) {
         _showType = showType;
         _boolHorizontal = directionType == YXFuncCycleScrollViewDirectionTypeHorizontal ? YES : NO;
         _boolCycle = boolCycle;
+        _zoomRadio = zoomRadio;
         
         if (_boolCycle) {
             [self initViewByCycle];
@@ -64,21 +67,23 @@
     
     if (!_boolCycle) {
         [self initImgVByCount:self.imgValueArr.count];
+        
         for (UIImageView *imageView in _imgViewsArr) {
             YXFuncCycleScrollViewValueInfoModel *infoModel = self.imgValueArr[i];
             [imageView setImage:[UIImage imageNamed:infoModel.imgUrl]];
             imageView.tag = i;
-            [self zoomAnimationByView:imageView type:0];
+            
             i++;
         }
         [self changeImgVShowFrame];
+        
+        [self useZoomAnimationByCurrent:_pageControl.currentPage];
     }
     else {
-        NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 5 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 5 : 3;
-        NSInteger judgeShowCount = _showType == YXFuncCycleScrollViewTypeCard ? 3 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 3 : 1;
-        NSInteger judgeHiddenCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 2 : 1;
+        NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 5 : _showType == YXFuncCycleScrollViewType3DCard ? 5 : 3;
+        NSInteger judgeShowCount = _showType == YXFuncCycleScrollViewTypeCard ? 3 : _showType == YXFuncCycleScrollViewType3DCard ? 3 : 1;
+        NSInteger judgeHiddenCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewType3DCard ? 2 : 1;
         if (self.imgValueArr.count <= 3) judgeShowCount = self.imgValueArr.count == 0 ? 0 : self.imgValueArr.count - 1;
-        
         for (UIImageView *imageView in _imgViewsArr) {
             if (_imgValueArr.count == 1 && i != judgeHiddenCount) {
                 imageView.hidden = YES;
@@ -104,6 +109,8 @@
             }
             i++;
         }
+        
+        [self useZoomAnimationByCurrent:judgeHiddenCount];
     }
     
     if (self.imgValueArr.count == 1) _pageBtn.hidden = YES;
@@ -114,7 +121,7 @@
 #pragma mark - 根据显示类型更改图片显示位置
 - (void)changeImgVShowFrame {
     
-    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 2 : 1;
+    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewType3DCard ? 2 : 1;
     if (!_boolCycle) judgeCount = 0;
     
     __weak typeof(self) weakSelf = self;
@@ -145,7 +152,7 @@
                     imgV.clipsToBounds = YES;
                     break;
                 }
-                case YXFuncCycleScrollViewTypeAmplificationCard: {
+                case YXFuncCycleScrollViewType3DCard: {
                     weakSelf.imgVSize = scrollViewWidth - left;
                     imgV.frame = CGRectMake((weakSelf.imgVSize + right) *idx, top, weakSelf.imgVSize, scrollViewHeight - (top + bottom));
                     imgV.clipsToBounds = YES;
@@ -158,13 +165,12 @@
         
         CGFloat imgCriticalValue = _imgVSize != 0 ? weakSelf.imgVSize : scrollViewWidth;
         _rollingDistance = _imgVSize != 0 ? (imgCriticalValue + right) : scrollViewWidth;
-//        left = _boolCycle ? left : right *2;
         if (_showType == YXFuncCycleScrollViewTypeCard) {
             _scrollView.clipsToBounds = NO;
             _scrollView.frame = CGRectMake(left /2, 0, _rollingDistance, scrollViewHeight);
             [_scrollView setContentSize:CGSizeMake((imgCriticalValue + right) *_imgViewsArr.count, scrollViewHeight)];
         }
-        else if (_showType == YXFuncCycleScrollViewTypeAmplificationCard) {
+        else if (_showType == YXFuncCycleScrollViewType3DCard) {
             _scrollView.clipsToBounds = NO;
             _scrollView.frame = CGRectMake(left /2, 0, _rollingDistance, scrollViewHeight);
             [_scrollView setContentSize:CGSizeMake((imgCriticalValue + right) *_imgViewsArr.count, scrollViewHeight)];
@@ -194,7 +200,7 @@
                     imgV.clipsToBounds = YES;
                     break;
                 }
-                case YXFuncCycleScrollViewTypeAmplificationCard: {
+                case YXFuncCycleScrollViewType3DCard: {
                     weakSelf.imgVSize = scrollViewHeight - top;
                     imgV.frame = CGRectMake(left, (weakSelf.imgVSize + bottom) *idx, scrollViewWidth - (left + right), weakSelf.imgVSize);
                     imgV.clipsToBounds = YES;
@@ -212,7 +218,7 @@
             _scrollView.frame = CGRectMake(0, top /2, scrollViewWidth, _rollingDistance);
             [_scrollView setContentSize:CGSizeMake(scrollViewWidth, (imgCriticalValue + bottom) *_imgViewsArr.count)];
         }
-        else if (_showType == YXFuncCycleScrollViewTypeAmplificationCard) {
+        else if (_showType == YXFuncCycleScrollViewType3DCard) {
             _scrollView.clipsToBounds = NO;
             _scrollView.frame = CGRectMake(0, top /2, scrollViewWidth, _rollingDistance);
             [_scrollView setContentSize:CGSizeMake(scrollViewWidth, (imgCriticalValue + bottom) *_imgViewsArr.count)];
@@ -262,7 +268,7 @@
 #pragma mark - processTimer
 - (void)processTimer {
 
-    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 3 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 3 : 2;
+    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 3 : _showType == YXFuncCycleScrollViewType3DCard ? 3 : 2;
     if (_boolHorizontal) {
         [_scrollView setContentOffset:CGPointMake(_rollingDistance *judgeCount, 0) animated:YES];
     }
@@ -302,7 +308,7 @@
         return;
     }
     
-    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 2 : 1;
+    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewType3DCard ? 2 : 1;
     if (!boolFirst) judgeCount = 1;
     
     for (NSInteger i = 0; i < judgeCount; i ++) {
@@ -340,9 +346,9 @@
 #pragma mark - 滚动切换
 - (void)scrollViewChangeImgByScrollView:(UIScrollView *)scrollView {
     
-    NSInteger judgeBigCount = _showType == YXFuncCycleScrollViewTypeCard ? 3 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 3 : 2;
-    NSInteger judgeSmallCount = _showType == YXFuncCycleScrollViewTypeCard ? 1 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 1 : 0;
-    NSInteger judgeShowCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 2 : 1;
+    NSInteger judgeBigCount = _showType == YXFuncCycleScrollViewTypeCard ? 3 : _showType == YXFuncCycleScrollViewType3DCard ? 3 : 2;
+    NSInteger judgeSmallCount = _showType == YXFuncCycleScrollViewTypeCard ? 1 : _showType == YXFuncCycleScrollViewType3DCard ? 1 : 0;
+    NSInteger judgeShowCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewType3DCard ? 2 : 1;
     
     CGFloat offsetOrigin = 0.f;
     if (_boolHorizontal) {
@@ -354,16 +360,30 @@
     
     if (!_boolCycle) {
         judgeShowCount = floor((scrollView.contentOffset.x + _rollingDistance *0.5) /_rollingDistance);
-        _pageControl.currentPage = _pageControl.currentPage == self.imgValueArr.count - 1 ? judgeShowCount + 1 : judgeShowCount;
+        if (judgeShowCount > _pageControl.currentPage) {
+            _alreadCurrent = (judgeShowCount - 1) > 0 ? (judgeShowCount - 1) : 0;
+        }
+        else if (judgeShowCount < _pageControl.currentPage) {
+            _alreadCurrent = (judgeShowCount + 1) > 0 ? (judgeShowCount + 1) : 0;
+        }
+        else {
+            return;
+        }
+        _pageControl.currentPage = judgeShowCount;
+        [self useZoomAnimationByCurrent:_pageControl.currentPage];
+        
+        [_pageBtn setTitle:[NSString stringWithFormat:@" %@/%@ ", @(_pageControl.currentPage + 1), @(self.imgValueArr.count)] forState:UIControlStateNormal];
     }
     else {
         if (offsetOrigin >= judgeBigCount *_rollingDistance) { //滑动到右边视图
             [self updateLastValue];
             _pageControl.currentPage = _pageControl.currentPage == self.imgValueArr.count - 1 ? 0 : _pageControl.currentPage + 1;
+            _alreadCurrent = (judgeShowCount - 1) > 0 ? (judgeShowCount - 1) : 0;
         }
         else if (offsetOrigin <= judgeSmallCount *_rollingDistance) { //滑动到左边视图
             [self updateFirstValueByBoolFirst:NO];
             _pageControl.currentPage = _pageControl.currentPage == 0 ? self.imgValueArr.count - 1 : _pageControl.currentPage - 1;
+            _alreadCurrent = (judgeShowCount + 1) > 0 ? (judgeShowCount + 1) : 0;
         }
         else {
             return;
@@ -380,17 +400,45 @@
     }
 }
 
+#pragma mark - 使用动画
+- (void)useZoomAnimationByCurrent:(NSInteger)current {
+    
+    NSInteger i = 0;
+    for (UIImageView *imageView in _imgViewsArr) {
+        if (i == current) {
+            [self zoomAnimationByView:imageView type:0 current:i];
+        }
+        else {
+            [self zoomAnimationByView:imageView type:1 current:i];
+        }
+        
+        i++;
+    }
+}
+
 #pragma mark - 放大缩小动画 0:放大 1:缩小
-- (void)zoomAnimationByView:(UIView *)view type:(NSInteger)type {
+- (void)zoomAnimationByView:(UIView *)view type:(NSInteger)type current:(NSInteger)current {
+    
+    if (_showType != YXFuncCycleScrollViewType3DCard) {
+        return;
+    }
+    
+    CGFloat fromValue = 1.0;
+    NSLog(@"current == %@, alreadCurrent == %@", @(current), @(_alreadCurrent));
+    if (current == _alreadCurrent) {
+        fromValue = _zoomRadio;
+    }
+    
+    CGFloat toValue = type == 0 ? _zoomRadio : 1.0;
     
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    animation.fromValue = [NSNumber numberWithFloat:1.0];
-    animation.toValue = [NSNumber numberWithFloat:1.5];
-    animation.duration = 1.0;
-    animation.autoreverses = YES;
+    animation.fromValue = [NSNumber numberWithFloat:fromValue];
+    animation.toValue = [NSNumber numberWithFloat:toValue];
+    animation.duration = 0.3;
     animation.repeatCount = 0;
-    animation.removedOnCompletion = YES;
-    animation.fillMode = kCAFillModeForwards;
+    animation.autoreverses = NO;
+    animation.removedOnCompletion = NO;
+    animation.fillMode = kCAFillModeBoth;
     [view.layer addAnimation:animation forKey:@"zoom"];
 }
 
@@ -478,8 +526,8 @@
         return;
     }
 
-    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 3 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 3 : 2;
-    NSInteger judgeShowCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 2 : 1;
+    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 3 : _showType == YXFuncCycleScrollViewType3DCard ? 3 : 2;
+    NSInteger judgeShowCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewType3DCard ? 2 : 1;
     
     for (NSInteger i = 0; i < _currentPage; i ++) {
         if (_boolHorizontal) {
@@ -563,7 +611,7 @@
 #pragma mark - 初始化循环视图
 - (void)initViewByCycle {
     
-    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 5 : _showType == YXFuncCycleScrollViewTypeAmplificationCard ? 5 : 3;
+    NSInteger judgeCount = _showType == YXFuncCycleScrollViewTypeCard ? 5 : _showType == YXFuncCycleScrollViewType3DCard ? 5 : 3;
     
     self.clipsToBounds = YES;
     _imgViewsArr = [[NSMutableArray alloc] init];
