@@ -39,7 +39,7 @@
 }
 
 #pragma mark - 初始化视图
-- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType directionType:(YXFuncCycleScrollViewDirectionType)directionType boolCycle:(NSInteger)boolCycle zoomRadio:(CGFloat)zoomRadio {
+- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType directionType:(YXFuncCycleScrollViewDirectionType)directionType boolCycle:(BOOL)boolCycle zoomRadio:(CGFloat)zoomRadio {
     self = [super initWithFrame:frame];
     
     if (self) {

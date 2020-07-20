@@ -96,7 +96,7 @@ typedef void(^YXFuncCycleScrollViewMoveBlock)(NSInteger page);
 - (instancetype)initWithFrame:(CGRect)frame
                      showType:(YXFuncCycleScrollViewType)showType
                 directionType:(YXFuncCycleScrollViewDirectionType)directionType
-                    boolCycle:(NSInteger)boolCycle
+                    boolCycle:(BOOL)boolCycle
                     zoomRadio:(CGFloat)zoomRadio;
 
 @end
