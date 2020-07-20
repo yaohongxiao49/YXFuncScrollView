@@ -76,7 +76,6 @@
             i++;
         }
         [self changeImgVShowFrame];
-        
         [self useZoomAnimationByCurrent:_pageControl.currentPage];
     }
     else {
@@ -125,8 +124,8 @@
     if (!_boolCycle) judgeCount = 0;
     
     __weak typeof(self) weakSelf = self;
-    __block CGFloat scrollViewWidth = _scrollView.frame.size.width;
-    __block CGFloat scrollViewHeight = _scrollView.frame.size.height;
+    __block CGFloat scrollViewWidth = self.bounds.size.width;
+    __block CGFloat scrollViewHeight = self.bounds.size.height;
     __block CGFloat top = self.edgeInsets.top;
     __block CGFloat left = self.edgeInsets.left;
     __block CGFloat bottom = self.edgeInsets.bottom;
@@ -701,22 +700,24 @@
 #pragma mark - 初始化图片显示视图
 - (void)initImgVByCount:(NSInteger)count {
     
-    for (int i = 0; i < count; i ++) {
-        UIImageView *imgV = [[UIImageView alloc] init];
-        imgV.tag = i;
-        if (_boolHorizontal) {
-            imgV.frame = CGRectMake(_scrollView.frame.size.width *i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+    if (_imgViewsArr.count != count) {
+        for (int i = 0; i < count; i ++) {
+            UIImageView *imgV = [[UIImageView alloc] init];
+            imgV.tag = i;
+            if (_boolHorizontal) {
+                imgV.frame = CGRectMake(_scrollView.frame.size.width *i, 0, _scrollView.frame.size.width, _scrollView.frame.size.height);
+            }
+            else {
+                imgV.frame = CGRectMake(0, _scrollView.frame.size.height *i, _scrollView.frame.size.width, _scrollView.frame.size.height);
+            }
+            imgV.contentMode = UIViewContentModeScaleAspectFill;
+            imgV.userInteractionEnabled = YES;
+            [_scrollView addSubview:imgV];
+            [_imgViewsArr addObject:imgV];
+            
+            UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction:)];
+            [imgV addGestureRecognizer:singleTap];
         }
-        else {
-            imgV.frame = CGRectMake(0, _scrollView.frame.size.height *i, _scrollView.frame.size.width, _scrollView.frame.size.height);
-        }
-        imgV.contentMode = UIViewContentModeScaleAspectFill;
-        imgV.userInteractionEnabled = NO;
-        [_scrollView addSubview:imgV];
-        [_imgViewsArr addObject:imgV];
-        
-        UITapGestureRecognizer *singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapAction:)];
-        [imgV addGestureRecognizer:singleTap];
     }
 }
 
