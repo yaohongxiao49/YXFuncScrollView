@@ -507,7 +507,7 @@
 #pragma mark - 是否显示分页控制器
 - (void)setBoolShowPageControl:(BOOL)boolShowPageControl {
     
-    _boolShowPageControl = boolShowPageControl;
+    _boolShowPageControl =! boolShowPageControl;
 }
 #pragma mark - 分页控制器坐标
 - (void)setPageframe:(CGRect)pageframe {
