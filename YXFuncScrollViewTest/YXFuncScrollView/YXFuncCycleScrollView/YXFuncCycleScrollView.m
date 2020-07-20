@@ -479,7 +479,7 @@
         _boolOpenTimer = NO;
     }
     else {
-        _pageBackView.hidden = NO;
+        _pageBackView.hidden = _boolShowPageControl;
         _scrollView.scrollEnabled = YES;
         [self updateFirstValueByBoolFirst:YES];
         _boolOpenTimer = YES;
@@ -508,7 +508,6 @@
 - (void)setBoolShowPageControl:(BOOL)boolShowPageControl {
     
     _boolShowPageControl = boolShowPageControl;
-    _pageBackView.hidden =! _boolShowPageControl;
 }
 #pragma mark - 分页控制器坐标
 - (void)setPageframe:(CGRect)pageframe {
