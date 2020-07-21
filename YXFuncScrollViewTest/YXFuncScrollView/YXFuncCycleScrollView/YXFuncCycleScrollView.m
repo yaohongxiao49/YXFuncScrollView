@@ -430,6 +430,13 @@
     
     CGFloat toValue = type == 0 ? _zoomRadio : 1.0;
     
+    if ((fromValue == 1.0 && toValue != 1.0) || (fromValue != 1.0 && toValue != 1.0)) {
+        view.userInteractionEnabled = YES;
+    }
+    else {
+        view.userInteractionEnabled = NO;
+    }
+    
     CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
     animation.fromValue = [NSNumber numberWithFloat:fromValue];
     animation.toValue = [NSNumber numberWithFloat:toValue];
