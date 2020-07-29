@@ -75,6 +75,7 @@
             YXFuncCycleScrollViewValueInfoModel *infoModel = self.imgValueArr[i];
             [imageView setImage:[UIImage imageNamed:infoModel.imgUrl]];
             imageView.tag = i;
+            imageView.transform = CGAffineTransformIdentity;
             
             i++;
         }
