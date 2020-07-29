@@ -23,8 +23,10 @@
 @property (nonatomic, assign) CGFloat imgVSize; //卡片式图片尺寸
 @property (nonatomic, assign) CGFloat rollingDistance; //滚动距离
 @property (nonatomic, assign) BOOL boolCycle; //是否循环滚动
+@property (nonatomic, assign) BOOL boolDynamic; //3D卡片式效果时，是否需要实时动态滚动动画
 @property (nonatomic, assign) CGFloat zoomRadio; //3D卡片效果放大倍数
 @property (nonatomic, assign) NSInteger alreadCurrent; //上一次的下标
+@property (nonatomic, assign) CGFloat offsetOrigin; //滚动距离记录
 
 @end
 
@@ -39,13 +41,14 @@
 }
 
 #pragma mark - 初始化视图
-- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType directionType:(YXFuncCycleScrollViewDirectionType)directionType boolCycle:(BOOL)boolCycle zoomRadio:(CGFloat)zoomRadio {
+- (instancetype)initWithFrame:(CGRect)frame showType:(YXFuncCycleScrollViewType)showType directionType:(YXFuncCycleScrollViewDirectionType)directionType boolCycle:(BOOL)boolCycle boolDynamic:(BOOL)boolDynamic zoomRadio:(CGFloat)zoomRadio {
     self = [super initWithFrame:frame];
     
     if (self) {
         _showType = showType;
         _boolHorizontal = directionType == YXFuncCycleScrollViewDirectionTypeHorizontal ? YES : NO;
         _boolCycle = boolCycle;
+        _boolDynamic = boolDynamic;
         _zoomRadio = zoomRadio;
         
         if (_boolCycle) {
@@ -76,6 +79,7 @@
             i++;
         }
         [self changeImgVShowFrame];
+        //初始设置
         [self useZoomAnimationByCurrent:_pageControl.currentPage];
     }
     else {
@@ -108,8 +112,6 @@
             }
             i++;
         }
-        
-        [self useZoomAnimationByCurrent:judgeHiddenCount];
     }
     
     if (self.imgValueArr.count == 1) _pageBtn.hidden = YES;
@@ -356,20 +358,26 @@
     else {
         offsetOrigin = scrollView.contentOffset.y;
     }
+    _offsetOrigin = offsetOrigin;
     
     if (!_boolCycle) {
         judgeShowCount = floor((scrollView.contentOffset.x + _rollingDistance *0.5) /_rollingDistance);
+        
         if (judgeShowCount > _pageControl.currentPage) {
             _alreadCurrent = (judgeShowCount - 1) > 0 ? (judgeShowCount - 1) : 0;
+            
+            [self useZoomAnimationByCurrent:judgeShowCount];
         }
         else if (judgeShowCount < _pageControl.currentPage) {
             _alreadCurrent = (judgeShowCount + 1) > 0 ? (judgeShowCount + 1) : 0;
+            
+            [self useZoomAnimationByCurrent:judgeShowCount];
         }
         else {
+            if (self.boolDynamic) [self useZoomAnimationByCurrent:judgeShowCount];
             return;
         }
         _pageControl.currentPage = judgeShowCount;
-        [self useZoomAnimationByCurrent:_pageControl.currentPage];
         
         [_pageBtn setTitle:[NSString stringWithFormat:@" %@/%@ ", @(_pageControl.currentPage + 1), @(self.imgValueArr.count)] forState:UIControlStateNormal];
     }
@@ -378,13 +386,18 @@
             [self updateLastValue];
             _pageControl.currentPage = _pageControl.currentPage == self.imgValueArr.count - 1 ? 0 : _pageControl.currentPage + 1;
             _alreadCurrent = (judgeShowCount - 1) > 0 ? (judgeShowCount - 1) : 0;
+            
+            [self useZoomAnimationByCurrent:judgeShowCount];
         }
         else if (offsetOrigin <= judgeSmallCount *_rollingDistance) { //滑动到左边视图
             [self updateFirstValueByBoolFirst:NO];
             _pageControl.currentPage = _pageControl.currentPage == 0 ? self.imgValueArr.count - 1 : _pageControl.currentPage - 1;
             _alreadCurrent = (judgeShowCount + 1) > 0 ? (judgeShowCount + 1) : 0;
+            
+            [self useZoomAnimationByCurrent:judgeShowCount];
         }
         else {
+            if (self.boolDynamic) [self useZoomAnimationByCurrent:judgeShowCount];
             return;
         }
         
@@ -423,13 +436,14 @@
     }
     
     CGFloat fromValue = 1.0;
-    NSLog(@"current == %@, alreadCurrent == %@", @(current), @(_alreadCurrent));
-    if (current == _alreadCurrent) {
+    CGFloat toValue = 1.0;
+    if (current == _alreadCurrent) { //缩小
         fromValue = _zoomRadio;
     }
-    
-    CGFloat toValue = type == 0 ? _zoomRadio : 1.0;
-    
+    if (type == 0) { //放大
+        toValue = _zoomRadio;
+    }
+
     if ((fromValue == 1.0 && toValue != 1.0) || (fromValue != 1.0 && toValue != 1.0)) {
         view.userInteractionEnabled = YES;
     }
@@ -437,15 +451,37 @@
         view.userInteractionEnabled = NO;
     }
     
-    CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
-    animation.fromValue = [NSNumber numberWithFloat:fromValue];
-    animation.toValue = [NSNumber numberWithFloat:toValue];
-    animation.duration = 0.3;
-    animation.repeatCount = 0;
-    animation.autoreverses = NO;
-    animation.removedOnCompletion = NO;
-    animation.fillMode = kCAFillModeBoth;
-    [view.layer addAnimation:animation forKey:@"zoom"];
+    CGFloat centerOrigin = 0.f;
+    if (_boolHorizontal) {
+        centerOrigin = self.scrollView.bounds.size.width *0.5 - (self.edgeInsets.right /2);
+    }
+    else {
+        centerOrigin = self.scrollView.bounds.size.height *0.5 - (self.edgeInsets.bottom /2);
+    }
+    centerOrigin = _offsetOrigin + centerOrigin;
+    
+    if (_boolDynamic) {
+        CGFloat centerImgOrigin = _boolHorizontal ? view.center.x : view.center.y;
+        CGFloat imgSizeOrigin = _boolHorizontal ? view.bounds.size.width : view.bounds.size.height;
+        //移动间距
+        CGFloat distance = ABS(centerImgOrigin - centerOrigin);
+        //移动比例（如果间距为0，则说明当前所在中间位置，即使用设定比例）
+        CGFloat proportion = distance == 0 ? _zoomRadio : (imgSizeOrigin /distance);
+        //放大比例（如果移动比例大于指定比例，则使用指定比例，最小比例为1）
+        CGFloat scale = proportion >= _zoomRadio ? _zoomRadio : proportion <= 1 ? 1 : proportion;
+        view.transform = CGAffineTransformMakeScale(scale, scale);
+    }
+    else {
+        CABasicAnimation *animation = [CABasicAnimation animationWithKeyPath:@"transform.scale"];
+        animation.fromValue = [NSNumber numberWithFloat:fromValue];
+        animation.toValue = [NSNumber numberWithFloat:toValue];
+        animation.duration = 0.3;
+        animation.repeatCount = 0;
+        animation.autoreverses = NO;
+        animation.removedOnCompletion = NO;
+        animation.fillMode = kCAFillModeBoth;
+        [view.layer addAnimation:animation forKey:@"zoom"];
+    }
 }
 
 #pragma mark - <UIScrollViewDelegate>
@@ -493,6 +529,10 @@
     
     _pageControl.numberOfPages = _imgValueArr.count;
     [self setImageFromImageNames];
+}
+- (void)setBoolDynamic:(BOOL)boolDynamic {
+    
+    _boolDynamic = boolDynamic;
 }
 
 #pragma mark - 是否含有定时器
@@ -663,6 +703,10 @@
     _pageBtn.layer.cornerRadius = 11;
     _pageBtn.layer.masksToBounds = YES;
     [self addSubview:_pageBtn];
+    
+    //初始设置
+    NSInteger judgeHiddenCount = _showType == YXFuncCycleScrollViewTypeCard ? 2 : _showType == YXFuncCycleScrollViewType3DCard ? 2 : 1;
+    [self useZoomAnimationByCurrent:judgeHiddenCount];
 }
 
 #pragma mark - 初始化不循环视图

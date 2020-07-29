@@ -43,7 +43,7 @@
 #pragma mark - banner
 - (void)initBannerView {
     
-    YXFuncCycleScrollView *view = [[YXFuncCycleScrollView alloc] initWithFrame:CGRectMake(0, 200, self.view.bounds.size.width, 200) showType:YXFuncCycleScrollViewType3DCard directionType:YXFuncCycleScrollViewDirectionTypeHorizontal boolCycle:NO zoomRadio:1.2];
+    YXFuncCycleScrollView *view = [[YXFuncCycleScrollView alloc] initWithFrame:CGRectMake(0, 200, self.view.bounds.size.width, 200) showType:YXFuncCycleScrollViewType3DCard directionType:YXFuncCycleScrollViewDirectionTypeHorizontal boolCycle:NO boolDynamic:YES zoomRadio:1.2];
     view.backgroundColor = [UIColor redColor];
     view.edgeInsets = UIEdgeInsetsMake(10, 200, 10, 40);
     view.cornerRadius = 10;

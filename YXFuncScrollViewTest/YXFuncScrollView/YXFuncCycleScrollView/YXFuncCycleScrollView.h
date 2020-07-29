@@ -91,12 +91,14 @@ typedef void(^YXFuncCycleScrollViewMoveBlock)(NSInteger page);
  * @param showType 显示类型
  * @param directionType 滚动方向
  * @param boolCycle 是否循环滚动
+ * @param boolDynamic 3D卡片式效果时，是否需要实时动态滚动动画
  * @param zoomRadio 3D卡片式效果放大倍数，非3D卡片式设置为0或1
  */
 - (instancetype)initWithFrame:(CGRect)frame
                      showType:(YXFuncCycleScrollViewType)showType
                 directionType:(YXFuncCycleScrollViewDirectionType)directionType
                     boolCycle:(BOOL)boolCycle
+                  boolDynamic:(BOOL)boolDynamic
                     zoomRadio:(CGFloat)zoomRadio;
 
 @end
