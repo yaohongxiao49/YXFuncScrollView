@@ -342,7 +342,9 @@
 #pragma mark - 开启Timer
 - (void)openTimer {
     
-    _timer.fireDate = [NSDate dateWithTimeIntervalSinceNow:self.timeInterval];
+    if (self.imgValueArr.count > 1) {
+        [_timer setFireDate:[NSDate dateWithTimeIntervalSinceNow:self.timeInterval]];
+    }
 }
 
 #pragma mark - 滚动切换
