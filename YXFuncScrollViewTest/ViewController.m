@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "YXFuncPinScrollViewController.h"
 #import "YXFuncCycleScrollViewVC.h"
+#import "YXFuncCollectionViewVC.h"
  
 @interface ViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -23,7 +24,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    _dataSourceArr = [[NSMutableArray alloc] initWithObjects:@"吸顶的滚动视图", @"无限循环的滚动视图", @"other", nil];
+    _dataSourceArr = [[NSMutableArray alloc] initWithObjects:@"吸顶的滚动视图", @"无限循环的滚动视图", @"other", @"卡片式", nil];
     
     self.navigationController.title = @"主页";
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, CGRectGetWidth(self.view.bounds), CGRectGetHeight(self.view.bounds) - 64) style:UITableViewStylePlain];
@@ -55,6 +56,10 @@
     }
     else if (indexPath.row == 1) {
         YXFuncCycleScrollViewVC *vc = [[YXFuncCycleScrollViewVC alloc] init];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if (indexPath.row == 2) {
+        YXFuncCollectionViewVC *vc = [[YXFuncCollectionViewVC alloc] init];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else {
